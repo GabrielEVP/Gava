@@ -1,0 +1,24 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class ExpenseType extends Model
+{
+    use HasFactory;
+
+    protected $table = 'expense_types';
+
+    protected $fillable = [
+        'name',
+        'description',
+    ];
+
+    // Relación con RecurringExpenses
+    public function recurringExpenses()
+    {
+        return $this->hasMany(RecurringExpense::class, 'type_expense_id');
+    }
+}
