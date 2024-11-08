@@ -14,6 +14,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::middleware('auth:sanctum')->group(function(){
+    Route::post('companies/{id}/login', [CompanyController::class, 'CompanyLogin']);
+
     Route::resource('products', ProductController::class);
     Route::resource('companies', CompanyController::class);
 

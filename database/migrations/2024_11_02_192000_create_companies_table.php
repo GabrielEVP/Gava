@@ -34,6 +34,7 @@ return new class extends Migration
             $table->integer('number_of_employees')->nullable();
             $table->text('notes')->nullable();
             $table->timestamps();
+            $table->softDeletes();
             $table->unsignedBigInteger('user_id')->nullable();
 
             // Clave foránea
