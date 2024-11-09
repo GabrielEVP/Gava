@@ -47,8 +47,8 @@ class User extends Authenticatable
         ];
     }
 
-    public function company()
+    public function companies(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->belongsTo(Company::class);
+        return $this->hasMany(Company::class);
     }
 }

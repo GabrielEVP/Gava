@@ -5,16 +5,33 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CompanyRequest;
 use App\Models\Company;
+use Illuminate\Http\JsonResponse;
 
+/**
+ * Class CompanyController
+ *
+ * Controller for handling company-related operations.
+ */
 class CompanyController extends Controller
 {
-    public function index(): \Illuminate\Http\JsonResponse
+    /**
+     * Display a listing of the companies for the authenticated user.
+     *
+     * @return JsonResponse
+     */
+    public function index(): JsonResponse
     {
         $companies = Company::where('user_id', auth()->id())->get();
         return response()->json($companies, 200);
     }
 
-    public function store(CompanyRequest $request): \Illuminate\Http\JsonResponse
+    /**
+     * Store a newly created company in storage.
+     *
+     * @param CompanyRequest $request The request object containing company data.
+     * @return JsonResponse
+     */
+    public function store(CompanyRequest $request): JsonResponse
     {
         $company = Company::create(array_merge(
             $request->all(),
@@ -24,13 +41,26 @@ class CompanyController extends Controller
         return response()->json($company, 201);
     }
 
-    public function show(string $id): \Illuminate\Http\JsonResponse
+    /**
+     * Display the specified company.
+     *
+     * @param string $id The ID of the company.
+     * @return JsonResponse
+     */
+    public function show(string $id): JsonResponse
     {
         $company = Company::findOrFail($id);
         return response()->json($company, 200);
     }
 
-    public function update(CompanyRequest $request, string $id): \Illuminate\Http\JsonResponse
+    /**
+     * Update the specified company in storage.
+     *
+     * @param CompanyRequest $request The request object containing updated company data.
+     * @param string $id The ID of the company.
+     * @return JsonResponse
+     */
+    public function update(CompanyRequest $request, string $id): JsonResponse
     {
         $company = Company::findOrFail($id);
         $company->update($request->all());
@@ -38,10 +68,17 @@ class CompanyController extends Controller
         return response()->json($company, 200);
     }
 
-    public function destroy(string $id): \Illuminate\Http\JsonResponse
+    /**
+     * Remove the specified company from storage.
+     *
+     * @param string $id The ID of the company.
+     * @return JsonResponse
+     */
+    public function destroy(string $id): JsonResponse
     {
         $company = Company::findOrFail($id);
         $company->delete();
 
-        return response()->json(["message" => "Company With Id: {$id} Has Been Deleted"], 200);    }
- }
+        return response()->json(["message" => "Company With Id: {$id} Has Been Deleted"], 200);
+    }
+}

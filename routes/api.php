@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\api\ClientController;
 use App\Http\Controllers\api\CompanyController;
 use App\Http\Controllers\Api\ProductController;
 use Illuminate\Http\Request;
@@ -14,11 +15,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::middleware('auth:sanctum')->group(function(){
-    Route::post('companies/{id}/login', [CompanyController::class, 'CompanyLogin']);
+    Route::resource('{company_id}/clients', ClientController::class);
 
     Route::resource('products', ProductController::class);
     Route::resource('companies', CompanyController::class);
-
     Route::get('logout', [AuthController::class, 'logout']);
 });
 
