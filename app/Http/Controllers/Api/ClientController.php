@@ -126,6 +126,8 @@ class ClientController extends Controller
 
         if (auth()->user()->can('access', $company)) {
             $client = $company->clients()->findOrFail($id);
+            $client->phones()->delete();
+            $client->emails()->delete();
             $client->delete();
             return response()->json(["message" => "Client With Id: {$id} Has Been Deleted"], 200);
         }

@@ -1,9 +1,10 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\api\ClientController;
-use App\Http\Controllers\api\CompanyController;
+use App\Http\Controllers\Api\ClientController;
+use App\Http\Controllers\Api\CompanyController;
 use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\TypePriceController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -15,11 +16,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::middleware('auth:sanctum')->group(function(){
-    Route::resource('{company_id}/clients', ClientController::class);
-
-    Route::resource('products', ProductController::class);
     Route::resource('companies', CompanyController::class);
     Route::get('logout', [AuthController::class, 'logout']);
+
+    Route::resource('{company_id}/clients', ClientController::class);
+    Route::resource('{company_id}/products', ProductController::class);
+    Route::resource('{company_id}/typePrices', TypePriceController::class);
+    Route::resource('{company_id}/ProductCategories', TypePriceController::class);
 });
 
 

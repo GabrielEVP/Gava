@@ -4,52 +4,87 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * Class Product
+ *
+ * Represents a product in the application.
+ *
+ * @package App\Models
+ */
 class Product extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
 
-    protected $table = 'products';
-
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     protected $fillable = [
         'name',
         'description',
-        'price',
+        'barcode',
+        'reference_code',
+        'purchase_price',
         'vat_rate',
         'stock_quantity',
         'units_per_box',
         'company_id',
-        'product_categorie_id',
+        'product_category_id',
+        'supplier_id',
+        'purchase_id',
     ];
 
-    // Relación con Company
-    public function company()
+    /**
+     * Get the company that owns the product.
+     *
+     * @return BelongsTo
+     */
+    public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);
     }
 
-    // Relación con ProductCategory
-    public function category()
+    /**
+     * Get the product category that the product belongs to.
+     *
+     * @return BelongsTo
+     */
+    public function productCategory(): BelongsTo
     {
-        return $this->belongsTo(ProductCategory::class, 'product_categorie_id');
+        return $this->belongsTo(ProductCategory::class);
     }
 
-    // Relación con ProductPrices
-    public function prices()
+    /**
+     * Get the supplier that provides the product.
+     *
+     * @return BelongsTo
+     */
+    public function supplier(): BelongsTo
+    {
+        return $this->belongsTo(Supplier::class);
+    }
+
+    /**
+     * Get the purchase associated with the product.
+     *
+     * @return BelongsTo
+     */
+    public function purchase(): BelongsTo
+    {
+        return $this->belongsTo(Purchase::class);
+    }
+
+    /**
+     * Get the prices associated with the product.
+     *
+     * @return HasMany
+     */
+    public function productPrices(): HasMany
     {
         return $this->hasMany(ProductPrice::class);
-    }
-
-    // Relación con InvoiceLines
-    public function invoiceLines()
-    {
-        return $this->hasMany(InvoiceLine::class);
-    }
-
-    // Relación con OrderLines
-    public function orderLines()
-    {
-        return $this->hasMany(OrderLine::class);
     }
 }
