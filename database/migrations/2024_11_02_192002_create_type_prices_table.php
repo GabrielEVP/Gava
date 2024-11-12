@@ -13,8 +13,9 @@ return new class extends Migration
     {
         Schema::create('type_prices', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique(); // Nombre del tipo de precio
-            $table->string('description')->nullable(); // Descripción opcional
+            $table->string('name')->unique();
+            $table->string('description')->nullable();
+            $table->decimal('percentage', 5, 2);
             $table->timestamps();
             $table->unsignedBigInteger('company_id')->nullable();
 

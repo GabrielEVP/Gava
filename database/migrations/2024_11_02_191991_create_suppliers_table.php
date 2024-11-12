@@ -25,10 +25,8 @@ return new class extends Migration
             $table->unsignedBigInteger('company_id'); // ID de la compañía relacionada
             $table->unsignedBigInteger('supplier_categories_id'); // ID de la categoría del proveedor
 
-            // Claves foráneas
             $table->foreign('category_id')->references('id')->on('supplier_categories')->onDelete('set null');
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
-            $table->foreign('supplier_categories_id')->references('id')->on('supplier_categories')->onDelete('cascade');
         });
     }
 

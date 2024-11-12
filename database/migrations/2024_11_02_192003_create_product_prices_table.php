@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('product_prices', function (Blueprint $table) {
             $table->id();
-            $table->decimal('price', 10, 2); // Precio del producto
+            $table->decimal('price', 10, 2); 
             $table->timestamps();
-            $table->unsignedBigInteger('product_id'); // Clave foránea que referencia a la tabla products
-            $table->unsignedBigInteger('type_price_id'); // Clave foránea que referencia a la tabla type_prices
+            $table->unsignedBigInteger('product_id');
+            $table->unsignedBigInteger('type_price_id');
 
             // Claves foráneas
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
