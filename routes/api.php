@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ClientController;
 use App\Http\Controllers\Api\CompanyController;
+use App\Http\Controllers\Api\ProductCategoryController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\TypePriceController;
 use Illuminate\Http\Request;
@@ -22,7 +23,7 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::resource('{company_id}/clients', ClientController::class);
     Route::resource('{company_id}/products', ProductController::class);
     Route::resource('{company_id}/typePrices', TypePriceController::class);
-    Route::resource('{company_id}/ProductCategories', TypePriceController::class);
+    Route::resource('{company_id}/productCategories', ProductCategoryController::class);
 });
 
 

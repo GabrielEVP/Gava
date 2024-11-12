@@ -4,15 +4,33 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 
+/**
+ * Class Company
+ *
+ * Represents a company in the application.
+ *
+ * @package App\Models
+ */
 class Company extends Model
 {
-    use HasFactory, Notifiable , SoftDeletes;
+    use HasFactory, Notifiable, SoftDeletes;
 
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
     protected $table = 'companies';
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     protected $fillable = [
         'name',
         'legal_name',
@@ -37,62 +55,113 @@ class Company extends Model
         'user_id',
     ];
 
-    // Relación con Clients
-    public function clients(): \Illuminate\Database\Eloquent\Relations\HasMany
+    /**
+     * Get the clients associated with the company.
+     *
+     * @return HasMany
+     */
+    public function clients(): HasMany
     {
         return $this->hasMany(Client::class);
     }
 
-    // Relación con Products
-    public function products(): \Illuminate\Database\Eloquent\Relations\HasMany
+    /**
+     * Get the products associated with the company.
+     *
+     * @return HasMany
+     */
+    public function products(): HasMany
     {
         return $this->hasMany(Product::class);
     }
 
-    // Relación con Suppliers
-    public function suppliers(): \Illuminate\Database\Eloquent\Relations\HasMany
+    /**
+     * Get the suppliers associated with the company.
+     *
+     * @return HasMany
+     */
+    public function suppliers(): HasMany
     {
         return $this->hasMany(Supplier::class);
     }
 
-    // Relación con Purchases
-    public function purchases(): \Illuminate\Database\Eloquent\Relations\HasMany
+    /**
+     * Get the purchases associated with the company.
+     *
+     * @return HasMany
+     */
+    public function purchases(): HasMany
     {
         return $this->hasMany(Purchase::class);
     }
 
-    // Relación con Invoices
-    public function invoices(): \Illuminate\Database\Eloquent\Relations\HasMany
+    /**
+     * Get the invoices associated with the company.
+     *
+     * @return HasMany
+     */
+    public function invoices(): HasMany
     {
         return $this->hasMany(Invoice::class);
     }
 
-    // Relación con Recurring Invoices
-    public function recurringInvoices(): \Illuminate\Database\Eloquent\Relations\HasMany
+    /**
+     * Get the recurring invoices associated with the company.
+     *
+     * @return HasMany
+     */
+    public function recurringInvoices(): HasMany
     {
         return $this->hasMany(RecurringInvoice::class);
     }
 
-    // Relación con Recurring Expenses
-    public function recurringExpenses(): \Illuminate\Database\Eloquent\Relations\HasMany
+    /**
+     * Get the recurring expenses associated with the company.
+     *
+     * @return HasMany
+     */
+    public function recurringExpenses(): HasMany
     {
         return $this->hasMany(RecurringExpense::class);
     }
 
-    // Relación con Orders
-    public function orders(): \Illuminate\Database\Eloquent\Relations\HasMany
+    /**
+     * Get the orders associated with the company.
+     *
+     * @return HasMany
+     */
+    public function orders(): HasMany
     {
         return $this->hasMany(Order::class);
     }
 
-    // Relación con Users (si tienes una relación con el modelo User)
+    /**
+     * Get the user that owns the company.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function typePrices(): \Illuminate\Database\Eloquent\Relations\HasMany
+    /**
+     * Get the type prices associated with the company.
+     *
+     * @return HasMany
+     */
+    public function typePrices(): HasMany
     {
         return $this->hasMany(TypePrice::class);
+    }
+
+    /**
+     * Get the product categories associated with the company.
+     *
+     * @return HasMany
+     */
+    public function productCategories(): HasMany
+    {
+        return $this->hasMany(ProductCategory::class);
     }
 }
