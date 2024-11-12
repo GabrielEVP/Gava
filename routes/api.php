@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\ClientController;
 use App\Http\Controllers\Api\CompanyController;
 use App\Http\Controllers\Api\ProductCategoryController;
 use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\SupplierCategoryController;
 use App\Http\Controllers\Api\TypePriceController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -24,6 +25,8 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::resource('{company_id}/products', ProductController::class);
     Route::resource('{company_id}/typePrices', TypePriceController::class);
     Route::resource('{company_id}/productCategories', ProductCategoryController::class);
+    Route::resource('{company_id}/supplierCategory', SupplierCategoryController::class);
+
 });
 
 

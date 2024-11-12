@@ -164,4 +164,9 @@ class Company extends Model
     {
         return $this->hasMany(ProductCategory::class);
     }
+
+    public function supplierCategories(): HasMany
+    {
+        return $this->hasMany(SupplierCategory::class);
+    }
 }

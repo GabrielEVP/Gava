@@ -13,9 +13,12 @@ return new class extends Migration
     {
         Schema::create('supplier_categories', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique(); // Nombre de la categoría del proveedor
-            $table->string('description')->nullable(); // Descripción opcional de la categoría
+            $table->string('name')->unique();
+            $table->string('description')->nullable();
+            $table->unsignedBigInteger('company_id'); 
             $table->timestamps();
+
+            $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
         });
     }
 
