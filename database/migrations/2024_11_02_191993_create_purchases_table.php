@@ -18,9 +18,10 @@ return new class extends Migration
             $table->string('status'); // Estado de la compra (pendiente, completada, cancelada)
             $table->timestamps();
             $table->unsignedBigInteger('supplier_id'); // Clave foránea que referencia a la tabla suppliers
+            $table->unsignedBigInteger('company_id'); // Clave foránea que referencia a la tabla companies
 
-            // Clave foránea
             $table->foreign('supplier_id')->references('id')->on('suppliers')->onDelete('cascade');
+            $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
         });
     }
 

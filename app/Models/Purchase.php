@@ -5,40 +5,64 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Class Purchase
+ *
+ * Represents a purchase in the application.
+ *
+ * @package App\Models
+ */
 class Purchase extends Model
 {
     use HasFactory;
 
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
     protected $table = 'purchases';
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     protected $fillable = [
         'purchase_date',
         'total_amount',
         'status',
         'supplier_id',
+        'company_id',
     ];
 
-    // Relación con Supplier
-    public function supplier()
+    /**
+     * Get the supplier that owns the purchase.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function supplier(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Supplier::class);
     }
 
-    // Relación con PurchasePayments
-    public function payments()
+    /**
+     * Get the payments associated with the purchase.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function payments(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(PurchasePayment::class);
     }
 
-    // Relación con PurchaseDueDates
-    public function dueDates()
+    /**
+     * Get the due dates associated with the purchase.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function dueDates(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(PurchaseDueDate::class);
-    }
-
-    // Relación con PurchaseLines
-    public function lines()
-    {
-        return $this->hasMany(PurchaseLine::class);
     }
 }
