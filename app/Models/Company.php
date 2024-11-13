@@ -165,8 +165,23 @@ class Company extends Model
         return $this->hasMany(ProductCategory::class);
     }
 
+    /**
+     * Get the supplier categories associated with the company.
+     *
+     * @return HasMany
+     */
     public function supplierCategories(): HasMany
     {
         return $this->hasMany(SupplierCategory::class);
+    }
+
+    /**
+     * Get the expense types associated with the company.
+     *
+     * @return HasMany
+     */
+    public function expenseType(): HasMany
+    {
+        return $this->hasMany(ExpenseType::class);
     }
 }

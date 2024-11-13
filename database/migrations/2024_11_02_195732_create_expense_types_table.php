@@ -15,7 +15,11 @@ return new class extends Migration
             $table->id();
             $table->string('name')->unique(); // Nombre del tipo de gasto
             $table->string('description')->nullable(); // Descripción opcional del tipo de gasto
+            $table->unsignedBigInteger('company_id'); // ID de la compañía relacionada
             $table->timestamps();
+
+            // Foreign key constraint
+            $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
         });
     }
 
