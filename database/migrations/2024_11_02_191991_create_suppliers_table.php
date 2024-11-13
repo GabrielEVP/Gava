@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('suppliers', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique(); // Nombre del proveedor
-            $table->string('legal_name'); // Nombre legal del proveedor
+            $table->string('name'); // Nombre del proveedor
+            $table->string('legal_name')->unique(); // Nombre legal del proveedor
             $table->string('vat_number'); // Número de identificación fiscal
             $table->string('registration_number')->nullable(); // Número de registro
             $table->string('email')->nullable(); // Correo electrónico
@@ -23,9 +23,9 @@ return new class extends Migration
             $table->unsignedBigInteger('category_id')->nullable(); // Clave foránea que referencia a supplier_categories
             $table->timestamps();
             $table->unsignedBigInteger('company_id'); // ID de la compañía relacionada
-            $table->unsignedBigInteger('supplier_categories_id'); // ID de la categoría del proveedor
+            $table->unsignedBigInteger('supplier_category_id')->nullable(); // ID de la categoría del proveedor
 
-            $table->foreign('category_id')->references('id')->on('supplier_categories')->onDelete('set null');
+            $table->foreign('supplier_category_id')->references('id')->on('supplier_categories')->onDelete('set null');
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
         });
     }
