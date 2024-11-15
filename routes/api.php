@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\SupplierController;
 use App\Http\Controllers\Api\SupplierCategoryController;
 use App\Http\Controllers\Api\TypePriceController;
+use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -19,7 +20,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::middleware('auth:sanctum')->group(function(){
+Route::middleware('auth:sanctum')->group(function() {
     Route::resource('companies', CompanyController::class);
     Route::get('logout', [AuthController::class, 'logout']);
 
@@ -30,6 +31,7 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::resource('{company_id}/supplierCategory', SupplierCategoryController::class);
     Route::resource('{company_id}/supplier', SupplierController::class);
     Route::resource('{company_id}/expenseType', ExpenseTypeController::class);
+    Route::resource('{company_id}/order', Order::class);
 });
 
 
