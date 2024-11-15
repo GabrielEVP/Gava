@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PurchaseRequest;
-use App\Models\Purchase;
 use App\Models\Company;
+use App\Models\Purchase;
 use App\Models\PurchaseLine;
+use App\Models\PurchaseDueDate;
+use App\Models\PurchasePayment;
 use Illuminate\Http\JsonResponse;
 
 class PurchaseController extends Controller
@@ -44,10 +46,18 @@ class PurchaseController extends Controller
             $purchase = Purchase::create($request->validated());
 
             foreach ($request->input('purchase_lines', []) as $line) {
-                $line['purchase_id'] = $purchase->id;
                 PurchaseLine::create($line);
             }
-            return response()->json($purchase->load('purchaseLines'), 201);
+
+            foreach ($request->input('purchase_due_dates', []) as $dueDate) {
+                PurchaseDueDate::create($dueDate);
+            }
+
+            foreach ($request->input('purchase_payments', []) as $payment) {
+                PurchasePayment::create($payment);
+            }
+
+            return response()->json($purchase->load(['purchaseLines', 'purchaseDueDates', 'purchasePayments']), 201);
         }
 
         return response()->json(['message' => 'You dont have access this Company'], 403);
@@ -80,7 +90,7 @@ class PurchaseController extends Controller
      * @param int $id The ID of the purchase.
      * @return JsonResponse
      */
-    public function update(int $company_id, PurchaseRequest $request,  int $id): JsonResponse
+    public function update(int $company_id, PurchaseRequest $request, int $id): JsonResponse
     {
         $company = Company::findOrFail($company_id);
 
@@ -89,13 +99,21 @@ class PurchaseController extends Controller
             $purchase->update($request->all());
 
             $purchase->purchaseLines()->delete();
-
             foreach ($request->input('purchase_lines', []) as $line) {
-                $line['purchase_id'] = $purchase->id;
                 PurchaseLine::create($line);
             }
 
-            return response()->json($purchase->load('purchaseLines'), 200);
+            $purchase->purchaseDueDates()->delete();
+            foreach ($request->input('purchase_due_dates', []) as $dueDate) {
+                PurchaseDueDate::create($dueDate);
+            }
+
+            $purchase->purchasePayments()->delete();
+            foreach ($request->input('purchase_payments', []) as $payment) {
+                PurchasePayment::create($payment);
+            }
+
+            return response()->json($purchase->load(['purchaseLines', 'purchaseDueDates', 'purchasePayments']), 200);
         }
 
         return response()->json(['message' => 'You dont have access this Company'], 403);

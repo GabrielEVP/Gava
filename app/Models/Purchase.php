@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * Class Purchase
@@ -39,9 +41,9 @@ class Purchase extends Model
     /**
      * Get the supplier that owns the purchase.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
-    public function supplier(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function supplier(): BelongsTo
     {
         return $this->belongsTo(Supplier::class);
     }
@@ -49,9 +51,9 @@ class Purchase extends Model
     /**
      * Get the payments associated with the purchase.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
-    public function payments(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function payments(): HasMany
     {
         return $this->hasMany(PurchasePayment::class);
     }
@@ -59,9 +61,9 @@ class Purchase extends Model
     /**
      * Get the due dates associated with the purchase.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
-    public function dueDates(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function dueDates(): HasMany
     {
         return $this->hasMany(PurchaseDueDate::class);
     }
