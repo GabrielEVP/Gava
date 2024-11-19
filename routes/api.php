@@ -36,8 +36,6 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::resource('{company_id}/order', OrderController::class);
     Route::resource('{company_id}/invoices', InvoiceController::class);
     Route::resource('{company_id}/typePayments', TypePaymentController::class);
-
-
 });
 
 
