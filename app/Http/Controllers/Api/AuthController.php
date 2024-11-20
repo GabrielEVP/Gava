@@ -5,12 +5,25 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AuthRequest;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 
+/**
+ * Class AuthController
+ *
+ * Controller for handling authentication-related actions.
+ */
 class AuthController extends Controller
 {
-    public function register(AuthRequest $request): \Illuminate\Http\JsonResponse
+    /**
+     * Register a new user and return an authentication token.
+     *
+     * @param AuthRequest $request The request containing user registration data.
+     * @return JsonResponse The response containing the authentication token.
+     */
+    public function register(AuthRequest $request): JsonResponse
     {
         $user = User::create($request->all());
         $token = $user->createToken('auth_token')->plainTextToken;
@@ -21,7 +34,13 @@ class AuthController extends Controller
         ]);
     }
 
-    public function login(AuthRequest $request): \Illuminate\Http\JsonResponse
+    /**
+     * Log in a user and return an authentication token.
+     *
+     * @param AuthRequest $request The request containing login credentials.
+     * @return JsonResponse The response containing the authentication token.
+     */
+    public function login(AuthRequest $request): JsonResponse
     {
         if (!Auth::attempt($request->only('email', 'password'))) {
             return response()->json([
@@ -38,7 +57,35 @@ class AuthController extends Controller
         ]);
     }
 
-    public function logout(): \Illuminate\Http\JsonResponse
+    /**
+     * Change the authenticated user's password.
+     *
+     * @param AuthRequest $request The request containing the current and new passwords.
+     * @return JsonResponse The response indicating the success of the password change.
+     * @throws ValidationException If the current password is incorrect.
+     */
+    public function changePassword(AuthRequest $request): JsonResponse
+    {
+        $user = auth()->user();
+
+        if (!Hash::check($request->current_password, $user->password)) {
+            throw ValidationException::withMessages([
+                'current_password' => ['La contraseña actual no es correcta.'],
+            ]);
+        }
+
+        $user->password = Hash::make($request->new_password);
+        $user->save();
+
+        return response()->json(['message' => 'Contraseña actualizada exitosamente.'], 200);
+    }
+
+    /**
+     * Log out the authenticated user by deleting their tokens.
+     *
+     * @return JsonResponse The response indicating the success of the logout.
+     */
+    public function logout(): JsonResponse
     {
         auth()->user()->tokens()->delete();
 

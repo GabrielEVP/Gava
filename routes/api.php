@@ -25,6 +25,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::middleware('auth:sanctum')->group(function() {
     Route::resource('companies', CompanyController::class);
     Route::get('logout', [AuthController::class, 'logout']);
+    Route::post('changePassword', [AuthController::class, 'changePassword']);
 
     Route::resource('{company_id}/clients', ClientController::class);
     Route::resource('{company_id}/products', ProductController::class);
