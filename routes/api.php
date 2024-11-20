@@ -23,20 +23,18 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::middleware('auth:sanctum')->group(function() {
-    Route::resource('companies', CompanyController::class);
-    Route::get('logout', [AuthController::class, 'logout']);
     Route::post('changePassword', [AuthController::class, 'changePassword']);
+    Route::get('logout', [AuthController::class, 'logout']);
 
+    Route::resource('companies', CompanyController::class);
     Route::resource('{company_id}/clients', ClientController::class);
-    Route::resource('{company_id}/products', ProductController::class);
-    Route::resource('{company_id}/typePrices', TypePriceController::class);
     Route::resource('{company_id}/productCategories', ProductCategoryController::class);
-    Route::resource('{company_id}/supplierCategory', SupplierCategoryController::class);
+    Route::resource('{company_id}/products', ProductController::class);
+    Route::resource('{company_id}/typePayments', TypePaymentController::class);
+    Route::resource('{company_id}/typePrices', TypePriceController::class);
     Route::resource('{company_id}/supplier', SupplierController::class);
+    Route::resource('{company_id}/supplierCategory', SupplierCategoryController::class);
     Route::resource('{company_id}/expenseType', ExpenseTypeController::class);
     Route::resource('{company_id}/order', OrderController::class);
     Route::resource('{company_id}/invoices', InvoiceController::class);
-    Route::resource('{company_id}/typePayments', TypePaymentController::class);
 });
-
-
