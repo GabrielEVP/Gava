@@ -35,18 +35,7 @@ class RecurringInvoiceLine extends Model
         'quantity',
         'unit_price',
         'total_price',
-        'company_id',
     ];
-
-    /**
-     * Get the company that owns the line item.
-     *
-     * @return BelongsTo
-     */
-    public function company(): BelongsTo
-    {
-        return $this->belongsTo(Company::class);
-    }
 
     /**
      * Get the recurring invoice that owns the line item.

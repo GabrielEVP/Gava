@@ -14,11 +14,8 @@ return new class extends Migration
         Schema::create('client_phones', function (Blueprint $table) {
             $table->id();
             $table->string('phone');
-            $table->enum('type', ['home', 'work', 'mobile'])->default('mobile');
-            $table->unsignedBigInteger('client_id');
-
-            $table->foreign('client_id')->references('id')->on('clients')->onDelete('cascade');
-
+            $table->enum('type', ['landline', 'mobile']); // Ensure this line is present and has the correct type
+            $table->foreignId('client_id')->constrained();
             $table->timestamps();
         });
     }

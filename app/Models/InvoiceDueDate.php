@@ -33,6 +33,7 @@ class InvoiceDueDate extends Model
         'invoice_id',
         'due_date',
         'amount',
+        'status',
     ];
 
     /**

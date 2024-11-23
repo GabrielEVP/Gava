@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * Class ExpenseType
@@ -38,9 +39,9 @@ class ExpenseType extends Model
     /**
      * Get the recurring expenses associated with the expense type.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
-    public function recurringExpenses(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function recurringExpenses(): HasMany
     {
         return $this->hasMany(RecurringExpense::class, 'type_expense_id');
     }

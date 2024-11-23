@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('supplier_categories', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique();
+            $table->string('name');
             $table->string('description')->nullable();
-            $table->unsignedBigInteger('company_id'); 
+            $table->unsignedBigInteger('company_id');
             $table->timestamps();
 
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');

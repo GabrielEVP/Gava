@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('invoice_due_dates', function (Blueprint $table) {
             $table->id();
             $table->date('due_date'); // Fecha de vencimiento
-            $table->decimal('amount_due', 10, 2); // Monto adeudado para la fecha de vencimiento
+            $table->decimal('amount', 10, 2); // Monto adeudado para la fecha de vencimiento
             $table->enum('status', ['pending', 'paid', 'overdue'])->default('pending'); // Estado del vencimiento
             $table->timestamps();
             $table->unsignedBigInteger('invoice_id'); // ID de la factura

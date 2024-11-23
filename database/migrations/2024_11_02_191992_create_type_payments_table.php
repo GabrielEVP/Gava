@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('type_payments', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique(); // Nombre del método de pago
+            $table->string('name'); // Nombre del método de pago
             $table->string('description')->nullable(); // Descripción opcional
             $table->timestamps();
             $table->unsignedBigInteger('company_id')->nullable();

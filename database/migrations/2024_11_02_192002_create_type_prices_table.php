@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('type_prices', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique();
+            $table->string('name');
             $table->string('description')->nullable();
             $table->decimal('percentage', 5, 2);
             $table->timestamps();

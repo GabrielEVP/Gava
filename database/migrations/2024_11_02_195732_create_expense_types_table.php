@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('expense_types', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique(); // Nombre del tipo de gasto
+            $table->string('name'); // Nombre del tipo de gasto
             $table->string('description')->nullable(); // Descripción opcional del tipo de gasto
             $table->unsignedBigInteger('company_id'); // ID de la compañía relacionada
             $table->timestamps();
