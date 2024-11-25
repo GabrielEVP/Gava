@@ -69,9 +69,7 @@ class AuthController extends Controller
         $user = auth()->user();
 
         if (!Hash::check($request->current_password, $user->password)) {
-            throw ValidationException::withMessages([
-                'current_password' => ['La contraseña actual no es correcta.'],
-            ]);
+            abort(404, 'La contraseña actual no es correcta.');
         }
 
         $user->password = Hash::make($request->new_password);
