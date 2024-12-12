@@ -1,4 +1,4 @@
-php artisan route:cache<?php
+<?php
 
 return [
 
