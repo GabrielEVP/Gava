@@ -24,11 +24,11 @@ use Laravel\Passport\Http\Controllers\TransientTokenController;
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::middleware('auth:sanctum')->group(function() {
+Route::middleware('auth:api')->group(function() {
     Route::post('changePassword', [AuthController::class, 'changePassword']);
     Route::post('logout', [AuthController::class, 'logout']);
 
