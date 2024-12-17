@@ -17,6 +17,7 @@ class AuthServiceProvider extends ServiceProvider
         Company::class => CompanyPolicy::class,
     ];
 
+
     /**
      * Registra los servicios de autorización.
      *
