@@ -5,7 +5,6 @@ namespace App\Providers;
 use App\Models\Company;
 use App\Policies\CompanyPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
-use Laravel\Passport\Passport;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -15,7 +14,7 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        Company::class => CompanyPolicy::class, // Aquí registras la política
+        Company::class => CompanyPolicy::class,
     ];
 
     /**
@@ -23,15 +22,8 @@ class AuthServiceProvider extends ServiceProvider
      *
      * @return void
      */
-
     public function boot(): void
     {
         $this->registerPolicies();
-
-        Passport::loadKeysFrom(storage_path('oauth'));
-
-        // Optional: Define token expiration times
-        Passport::tokensExpireIn(now()->addDays(1));
-        Passport::refreshTokensExpireIn(now()->addDays(30));
     }
 }

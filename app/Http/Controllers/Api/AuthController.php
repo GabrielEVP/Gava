@@ -9,12 +9,11 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
-use Illuminate\Support\Facades\Storage;
 
 /**
  * Class AuthController
  *
- * Controller for handling authentication-related actions.
+ * Controller for handling authentication-related actions using Laravel Sanctum.
  */
 class AuthController extends Controller
 {
@@ -26,13 +25,18 @@ class AuthController extends Controller
      */
     public function register(AuthRequest $request): JsonResponse
     {
-        $user = User::create($request->all());
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+        ]);
+
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
             'access_token' => $token,
             'token_type' => 'Bearer',
-        ]);
+        ], 201);
     }
 
     /**
@@ -41,21 +45,22 @@ class AuthController extends Controller
      * @param AuthRequest $request The request containing login credentials.
      * @return JsonResponse The response containing the authentication token.
      */
-
     public function login(AuthRequest $request): JsonResponse
     {
-        $credentials = $request->only('email', 'password');
-
-        if (Auth::attempt($credentials)) {
-            $user = Auth::user();
-
-            // Generar token de acceso
-            $token = $user->createToken('Access_Token')->accessToken;
-
-            return response()->json(['access_token' => $token], 200);
+        if (!Auth::attempt($request->only('email', 'password'))) {
+            return response()->json([
+                'message' => 'Invalid login details',
+            ], 401);
         }
 
-        return response()->json(['error' => 'Unauthorized'], 401);
+        $user = User::where('email', $request->email)->firstOrFail();
+
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        return response()->json([
+            'access_token' => $token,
+            'token_type' => 'Bearer',
+        ]);
     }
 
     /**
@@ -70,7 +75,9 @@ class AuthController extends Controller
         $user = auth()->user();
 
         if (!Hash::check($request->current_password, $user->password)) {
-            abort(404, 'La contraseña actual no es correcta.');
+            return response()->json([
+                'message' => 'La contraseña actual no es correcta.',
+            ], 404);
         }
 
         $user->password = Hash::make($request->new_password);
@@ -90,6 +97,6 @@ class AuthController extends Controller
 
         return response()->json([
             'message' => 'Successfully logged out',
-        ]);
+        ], 200);
     }
 }
