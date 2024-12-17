@@ -9,6 +9,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * Class AuthController
@@ -40,21 +41,21 @@ class AuthController extends Controller
      * @param AuthRequest $request The request containing login credentials.
      * @return JsonResponse The response containing the authentication token.
      */
+
     public function login(AuthRequest $request): JsonResponse
     {
-        if (!Auth::attempt($request->only('email', 'password'))) {
-            return response()->json([
-                'message' => 'Invalid login details',
-            ], 401);
+        $credentials = $request->only('email', 'password');
+
+        if (Auth::attempt($credentials)) {
+            $user = Auth::user();
+
+            // Generar token de acceso
+            $token = $user->createToken('Access_Token')->accessToken;
+
+            return response()->json(['access_token' => $token], 200);
         }
 
-        $user = User::where('email', $request['email'])->firstOrFail();
-        $token = $user->createToken('auth_token')->plainTextToken;
-
-        return response()->json([
-            'access_token' => $token,
-            'token_type' => 'Bearer',
-        ]);
+        return response()->json(['error' => 'Unauthorized'], 401);
     }
 
     /**

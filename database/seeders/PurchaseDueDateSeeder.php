@@ -1,12 +1,12 @@
 <?php
 
-namespace Database\Factories;
+namespace Database\Seeders;
 
 use App\Models\Purchase;
 use App\Models\PurchaseDueDate;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class PurchaseDueDateFactory extends Factory
+class PurchaseDueDateSeeder extends Factory
 {
     protected $model = PurchaseDueDate::class;
 
