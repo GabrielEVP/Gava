@@ -24,11 +24,11 @@ use Laravel\Passport\Http\Controllers\TransientTokenController;
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::middleware('auth:api')->group(function() {
+Route::middleware('auth:sanctum')->group(function() {
     Route::post('changePassword', [AuthController::class, 'changePassword']);
     Route::post('logout', [AuthController::class, 'logout']);
 
@@ -43,14 +43,4 @@ Route::middleware('auth:api')->group(function() {
     Route::resource('{company_id}/expenseType', ExpenseTypeController::class);
     Route::resource('{company_id}/order', OrderController::class);
     Route::resource('{company_id}/invoices', InvoiceController::class);
-});
-
-Route::group(['prefix' => 'oauth'], function () {
-    Route::post('/token', [AccessTokenController::class, 'issueToken']);
-    Route::get('/authorize', [AuthorizationController::class, 'authorize']);
-    Route::post('/authorize', [ApproveAuthorizationController::class, 'approve']);
-    Route::delete('/authorize', [DenyAuthorizationController::class, 'deny']);
-    Route::post('/token/refresh', [TransientTokenController::class, 'refresh']);
-    Route::post('/personal-access-tokens', [PersonalAccessTokenController::class, 'store']);
-    Route::delete('/personal-access-tokens/{token_id}', [PersonalAccessTokenController::class, 'destroy']);
 });
