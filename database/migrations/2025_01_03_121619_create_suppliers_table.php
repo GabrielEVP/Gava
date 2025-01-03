@@ -10,27 +10,39 @@ return new class extends Migration {
     {
         Schema::create('suppliers', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('legal_name')->unique();
-            $table->string('vat_number');
-            $table->string('registration_number')->nullable();
+            $table->string('code_number');
+            $table->string('registration_number');
+            $table->string('legal_name');
+            $table->string('type_client');
             $table->string('website')->nullable();
+            $table->string('address')->nullable();
+            $table->string('city')->nullable();
+            $table->string('state')->nullable();
+            $table->string('municipality')->nullable();
+            $table->string('postal_code')->nullable();
+            $table->string('country')->nullable();
+            $table->int('credit_day_limit', 5)->nullable();
+            $table->decimal('limit_credit', 5, 2)->nullable();
+            $table->text('notes')->nullable();
+            $table->timestamps();
+            $table->softDeletes();
             $table->unsignedBigInteger('company_id');
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
         });
 
         Schema::create('supplier_phones', function (Blueprint $table) {
             $table->id();
-            $table->string('phone');
             $table->enum('type', ['landline', 'mobile']);
+            $table->string('phone');
+            $table->unsignedBigInteger('supplier_id');
             $table->foreignId('supplier_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
 
         Schema::create('supplier_emails', function (Blueprint $table) {
             $table->id();
-            $table->string('email');
             $table->enum('type', ['personal', 'work'])->default('work');
+            $table->string('email');
             $table->unsignedBigInteger('supplier_id');
             $table->foreign('supplier_id')->references('id')->on('suppliers')->onDelete('cascade');
             $table->timestamps();

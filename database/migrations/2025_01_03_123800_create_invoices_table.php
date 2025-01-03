@@ -10,10 +10,13 @@ return new class extends Migration {
     {
         Schema::create('invoices', function (Blueprint $table) {
             $table->id();
-            $table->string('invoice_number')->unique();
-            $table->date('issue_date');
-            $table->enum('status', ['pending', 'paid', 'overdue'])->default('pending');
+            $table->string(column: 'invoice_number');
+            $table->string('concept');
+            $table->date(column: 'date');
+            $table->enum('status', allowed: ['pending', 'paid', 'overdue'])->default('pending');
+            $table->decimal('total_amount', 10, 2);
             $table->timestamps();
+            $table->softDeletes();
             $table->unsignedBigInteger('client_id');
             $table->unsignedBigInteger('company_id');
             $table->foreign('client_id')->references('id')->on('clients')->onDelete('cascade');
@@ -25,8 +28,9 @@ return new class extends Migration {
             $table->string('description');
             $table->integer('quantity');
             $table->decimal('unit_price', 10, 2);
-            $table->decimal('tax_rate', 5, 2)->default(0.00);
-            $table->decimal('total', 10, 2);
+            $table->decimal('vat_rate', 10, 2);
+            $table->decimal('total_amount', 10, 2)->generatedAs('quantity * unit_price)');
+            $table->decimal('total_amount_rate', 10, 2)->generatedAs('quantity * unit_price * (1 + vat_rate / 100)');
             $table->timestamps();
             $table->unsignedBigInteger('invoice_id');
             $table->unsignedBigInteger('product_id')->nullable();
@@ -38,6 +42,7 @@ return new class extends Migration {
             $table->id();
             $table->date('payment_date');
             $table->decimal('amount', 10, 2);
+            $table->enum('status', ['pending', 'paid', 'overdue'])->default('pending');
             $table->timestamps();
             $table->unsignedBigInteger('invoice_id');
             $table->unsignedBigInteger('type_payment_id');
@@ -49,7 +54,6 @@ return new class extends Migration {
             $table->id();
             $table->date('due_date');
             $table->decimal('amount', 10, 2);
-            $table->enum('status', ['pending', 'paid', 'overdue'])->default('pending');
             $table->timestamps();
             $table->unsignedBigInteger('invoice_id');
             $table->foreign('invoice_id')->references('id')->on('invoices')->onDelete('cascade');

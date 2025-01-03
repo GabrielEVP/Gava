@@ -23,6 +23,8 @@ return new class extends Migration {
             $table->unsignedBigInteger('product_category_id')->nullable();
             $table->unsignedBigInteger('supplier_id')->nullable();
             $table->unsignedBigInteger('purchase_id')->nullable();
+            $table->timestamps();
+            $table->softDeletes();
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
             $table->foreign('supplier_id')->references('id')->on('suppliers')->onDelete('cascade');
             $table->foreign('purchase_id')->references('id')->on('purchases')->onDelete('cascade')->nullable();
@@ -32,6 +34,7 @@ return new class extends Migration {
             $table->id();
             $table->decimal('price', 10, 2);
             $table->timestamps();
+            $table->softDeletes();
             $table->unsignedBigInteger('product_id');
             $table->unsignedBigInteger('type_price_id');
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');

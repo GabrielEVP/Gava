@@ -10,35 +10,43 @@ return new class extends Migration {
     {
         Schema::create('companies', function (Blueprint $table) {
             $table->id();
+            $table->string('code_number');
+            $table->string('registration_number');
             $table->string('legal_name');
             $table->string('name')->nullable();
-            $table->string('vat_number')->nullable();
-            $table->string('registration_number')->nullable();
             $table->string('email')->nullable();
             $table->string('phone')->nullable();
             $table->string('website')->nullable();
             $table->string('address')->nullable();
             $table->string('city')->nullable();
             $table->string('state')->nullable();
+            $table->string('municipality')->nullable();
             $table->string('postal_code')->nullable();
             $table->string('country')->nullable();
-            $table->string('currency')->default('USD');
-            $table->string('bank_account')->nullable();
-            $table->string('invoice_prefix')->nullable();
-            $table->enum('status', ['active', 'inactive', 'pending'])->default('active');
             $table->string('logo_url')->nullable();
-            $table->string('industry')->nullable();
-            $table->integer('number_of_employees')->nullable();
+            $table->enum('status', ['active', 'inactive'])->default('active');
             $table->text('notes')->nullable();
             $table->timestamps();
             $table->softDeletes();
             $table->unsignedBigInteger('user_id')->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
         });
+
+        Schema::create('company_bank_accounts', function (Blueprint $table) {
+            $table->id();
+            $table->string('bank_name');
+            $table->string('account_number');
+            $table->string('account_type');
+            $table->unsignedBigInteger('company_id');
+            $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
+            $table->timestamps();
+        });
+
     }
 
     public function down(): void
     {
+        Schema::dropIfExists('company_bank_accounts');
         Schema::dropIfExists('companies');
     }
 };

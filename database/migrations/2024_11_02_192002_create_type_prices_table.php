@@ -12,10 +12,12 @@ return new class extends Migration {
             $table->id();
             $table->string('name');
             $table->string('description')->nullable();
-            $table->decimal('percentage', 5, 2);
+            $table->enum('type', ['fixed', 'percentage']);
+            $table->decimal('margin', 5, 2);
             $table->timestamps();
+            $table->softDeletes();
             $table->unsignedBigInteger('company_id')->nullable();
-            $table->foreign('company_id')->references('id')->on('companies')->onDelete('set null');
+            $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
         });
     }
 
