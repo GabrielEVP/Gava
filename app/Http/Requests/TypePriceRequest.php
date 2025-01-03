@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class TypePriceRequest extends FormRequest
@@ -18,15 +17,16 @@ class TypePriceRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, ValidationRule|array|string>
+     * @return array<string, \Illuminate\Contracts\Validation\Rule|array<mixed>|string>
      */
     public function rules(): array
     {
         return [
             'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'percentage' => 'required|numeric|min:0|max:100',
-            'company_id' => 'required|exists:companies,id',
+            'description' => 'nullable|string|max:255',
+            'type' => 'required|string|in:fixed,percentage',
+            'margin' => 'required|numeric|min:0|max:100',
+            'company_id' => 'nullable|exists:companies,id',
         ];
     }
 }

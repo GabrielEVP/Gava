@@ -4,105 +4,78 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TypePriceRequest;
-use App\Models\Company;
 use App\Models\TypePrice;
 use Illuminate\Http\JsonResponse;
 
+/**
+ * Class TypePriceController
+ *
+ * Controller for handling type price-related operations.
+ */
 class TypePriceController extends Controller
 {
     /**
      * Display a listing of the type prices.
      *
-     * @param int $company_id
      * @return JsonResponse
      */
-    public function index(int $company_id): JsonResponse
+    public function index(): JsonResponse
     {
-        $company = Company::findOrFail($company_id);
-
-        if (auth()->user()->can('access', $company)) {
-            $typePrices = $company->typePrices;
-            return response()->json($typePrices, 200);
-        }
-
-        return response()->json(['message' => 'You dont have access this Company'], 403);
+        $typePrices = TypePrice::all();
+        return response()->json($typePrices, 200);
     }
 
     /**
      * Store a newly created type price in storage.
      *
-     * @param TypePriceRequest $request
+     * @param TypePriceRequest $request The request object containing type price data.
      * @return JsonResponse
      */
     public function store(TypePriceRequest $request): JsonResponse
     {
-        $company = Company::findOrFail($request->company_id);
+        $typePrice = TypePrice::create($request->all());
 
-        if (auth()->user()->can('access', $company)) {
-            $typePrice = TypePrice::create($request->all());
-            return response()->json($typePrice, 201);
-        }
-
-        return response()->json(['message' => 'You dont have access this Company'], 403);
+        return response()->json($typePrice, 201);
     }
 
     /**
      * Display the specified type price.
      *
-     * @param int $company_id
-     * @param TypePrice $typePrice
+     * @param string $id The ID of the type price.
      * @return JsonResponse
      */
-    public function show(int $company_id, TypePrice $typePrice): JsonResponse
+    public function show(string $id): JsonResponse
     {
-        $company = Company::findOrFail($company_id);
-
-        if (auth()->user()->can('access', $company)) {
-            return response()->json($typePrice);
-        }
-
-        return response()->json(['message' => 'You dont have access this Company'], 403);
+        $typePrice = TypePrice::findOrFail($id);
+        return response()->json($typePrice, 200);
     }
 
     /**
      * Update the specified type price in storage.
      *
-     * @param TypePriceRequest $request
-     * @param int $id
+     * @param TypePriceRequest $request The request object containing updated type price data.
+     * @param string $id The ID of the type price.
      * @return JsonResponse
      */
-    public function update(int $company_id, TypePriceRequest $request, int $id): JsonResponse
+    public function update(TypePriceRequest $request, string $id): JsonResponse
     {
-        $company = Company::findOrFail($company_id);
+        $typePrice = TypePrice::findOrFail($id);
+        $typePrice->update($request->all());
 
-        if (auth()->user()->can('access', $company)) {
-            $typePrice = TypePrice::findOrFail($id);
-            $typePrice->update($request->all());
-
-
-            return response()->json($typePrice, 200);
-        }
-
-        return response()->json(['message' => 'You dont have access this Company'], 403);
+        return response()->json($typePrice, 200);
     }
 
     /**
      * Remove the specified type price from storage.
      *
-     * @param int $company_id
-     * @param int $id
+     * @param string $id The ID of the type price.
      * @return JsonResponse
      */
-    public function destroy(int $company_id, int $id): JsonResponse
+    public function destroy(string $id): JsonResponse
     {
-        $company = Company::findOrFail($company_id);
+        $typePrice = TypePrice::findOrFail($id);
+        $typePrice->delete();
 
-        if (auth()->user()->can('access', $company)) {
-            $typePrice = typePrice::findOrFail($id);
-            $typePrice->delete();
-
-            return response()->json(["message" => "TypePrices With Id: {$id} Has Been Deleted"], 200);
-        }
-        return response()->json(['message' => 'You dont have access this Company'], 403);
+        return response()->json(["message" => "Type Price With Id: {$id} Has Been Deleted"], 200);
     }
 }

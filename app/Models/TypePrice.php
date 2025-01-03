@@ -5,18 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Class TypePrice
  *
- * Represents a type of price in the application.
+ * Represents a type of price entity.
  *
  * @package App\Models
  */
 class TypePrice extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     /**
      * The table associated with the model.
@@ -33,27 +33,18 @@ class TypePrice extends Model
     protected $fillable = [
         'name',
         'description',
-        'percentage',
+        'type',
+        'margin',
         'company_id',
     ];
 
     /**
-     * Get the company that owns the type price.
+     * Get the company that owns the type of price.
      *
      * @return BelongsTo
      */
     public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);
-    }
-
-    /**
-     * Get the product prices associated with the type price.
-     *
-     * @return HasMany
-     */
-    public function productPrices(): HasMany
-    {
-        return $this->hasMany(ProductPrice::class);
     }
 }
