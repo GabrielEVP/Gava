@@ -4,106 +4,111 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SupplierRequest;
-use App\Models\Company;
 use App\Models\Supplier;
 use Illuminate\Http\JsonResponse;
 
+/**
+ * Class SupplierController
+ *
+ * Controller for handling supplier-related operations.
+ */
 class SupplierController extends Controller
 {
     /**
      * Display a listing of the suppliers.
      *
-     * @param int $company_id The ID of the company.
-     * @return JsonResponse The JSON response containing the list of suppliers.
+     * @return JsonResponse
      */
-    public function index(int $company_id): JsonResponse
+    public function index(): JsonResponse
     {
-        $company = Company::findOrFail($company_id);
-
-        if (auth()->user()->can('access', $company)) {
-            $suppliers = $company->suppliers;
-            return response()->json($suppliers, 200);
-        }
-
-        return response()->json(['message' => 'You dont have access to this Company'], 403);
+        $suppliers = Supplier::all();
+        return response()->json($suppliers, 200);
     }
 
     /**
      * Store a newly created supplier in storage.
      *
-     * @param int $company_id The ID of the company.
-     * @param SupplierRequest $request The request object containing the supplier data.
-     * @return JsonResponse The JSON response containing the created supplier.
+     * @param SupplierRequest $request The request object containing supplier data.
+     * @return JsonResponse
      */
-    public function store(int $company_id, SupplierRequest $request): JsonResponse
+    public function store(SupplierRequest $request): JsonResponse
     {
-        $company = Company::findOrFail($company_id);
+        $supplier = Supplier::create($request->all());
 
-        if (auth()->user()->can('access', $company)) {
-            $supplier = Supplier::create($request->all());
-            return response()->json($supplier, 201);
+        $phones = $request->input('phones', []);
+        foreach ($phones as $phone) {
+            $supplier->phones()->create($phone);
         }
 
-        return response()->json(['message' => 'You dont have access to this Company'], 403);
+        $emails = $request->input('emails', []);
+        foreach ($emails as $email) {
+            $supplier->emails()->create($email);
+        }
+
+        $bankAccounts = $request->input('bank_accounts', []);
+        foreach ($bankAccounts as $bankAccount) {
+            $supplier->bankAccounts()->create($bankAccount);
+        }
+
+        return response()->json($supplier->load(['phones', 'emails', 'bankAccounts']), 201);
     }
 
     /**
      * Display the specified supplier.
      *
-     * @param int $company_id The ID of the company.
-     * @param int $id The ID of the supplier.
-     * @return JsonResponse The JSON response containing the supplier.
+     * @param string $id The ID of the supplier.
+     * @return JsonResponse
      */
-    public function show(int $company_id, int $id): JsonResponse
+    public function show(string $id): JsonResponse
     {
-        $company = Company::findOrFail($company_id);
-
-        if (auth()->user()->can('access', $company)) {
-            $supplier = Supplier::findOrFail($id);
-            return response()->json($supplier, 200);
-        }
-
-        return response()->json(['message' => 'You dont have access to this Company'], 403);
+        $supplier = Supplier::with(['phones', 'emails', 'bankAccounts'])->findOrFail($id);
+        return response()->json($supplier, 200);
     }
 
     /**
      * Update the specified supplier in storage.
      *
-     * @param int $company_id The ID of the company.
-     * @param SupplierRequest $request The request object containing the updated supplier data.
-     * @param int $id The ID of the supplier.
-     * @return JsonResponse The JSON response containing the updated supplier.
+     * @param SupplierRequest $request The request object containing updated supplier data.
+     * @param string $id The ID of the supplier.
+     * @return JsonResponse
      */
-    public function update(int $company_id, SupplierRequest $request, int $id): JsonResponse
+    public function update(SupplierRequest $request, string $id): JsonResponse
     {
-        $company = Company::findOrFail($company_id);
+        $supplier = Supplier::findOrFail($id);
+        $supplier->update($request->all());
 
-        if (auth()->user()->can('access', $company)) {
-            $supplier = Supplier::findOrFail($id);
-            $supplier->update($request->all());
-            return response()->json($supplier, 200);
+        $supplier->phones()->delete();
+        foreach ($request->input('phones', []) as $phone) {
+            $supplier->phones()->create($phone);
         }
 
-        return response()->json(['message' => 'You dont have access to this Company'], 403);
+        $supplier->emails()->delete();
+        foreach ($request->input('emails', []) as $email) {
+            $supplier->emails()->create($email);
+        }
+
+        $supplier->bankAccounts()->delete();
+        foreach ($request->input('bank_accounts', []) as $bankAccount) {
+            $supplier->bankAccounts()->create($bankAccount);
+        }
+
+        return response()->json($supplier->load(['phones', 'emails', 'bankAccounts']), 200);
     }
 
     /**
      * Remove the specified supplier from storage.
      *
-     * @param int $company_id The ID of the company.
-     * @param int $id The ID of the supplier.
-     * @return JsonResponse The JSON response confirming the deletion.
+     * @param string $id The ID of the supplier.
+     * @return JsonResponse
      */
-    public function destroy(int $company_id, int $id): JsonResponse
+    public function destroy(string $id): JsonResponse
     {
-        $company = Company::findOrFail($company_id);
+        $supplier = Supplier::findOrFail($id);
+        $supplier->phones()->delete();
+        $supplier->emails()->delete();
+        $supplier->bankAccounts()->delete();
+        $supplier->delete();
 
-        if (auth()->user()->can('access', $company)) {
-            $supplier = Supplier::findOrFail($id);
-            $supplier->delete();
-            return response()->json(["message" => "Supplier With Id: {$id} Has Been Deleted"], 200);
-        }
-
-        return response()->json(['message' => 'You dont have access to this Company'], 403);
+        return response()->json(["message" => "Supplier With Id: {$id} Has Been Deleted"], 200);
     }
 }

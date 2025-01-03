@@ -6,17 +6,18 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Class Supplier
  *
- * Represents a supplier in the application.
+ * Represents a supplier entity.
  *
  * @package App\Models
  */
 class Supplier extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     /**
      * The table associated with the model.
@@ -31,14 +32,20 @@ class Supplier extends Model
      * @var array
      */
     protected $fillable = [
-        'name',
-        'legal_name',
-        'vat_number',
+        'code_number',
         'registration_number',
-        'email',
-        'phone',
+        'legal_name',
+        'type_client',
         'website',
-        'category_id',
+        'address',
+        'city',
+        'state',
+        'municipality',
+        'postal_code',
+        'country',
+        'credit_day_limit',
+        'limit_credit',
+        'notes',
         'company_id',
     ];
 
@@ -53,22 +60,32 @@ class Supplier extends Model
     }
 
     /**
-     * Get the category that the supplier belongs to.
-     *
-     * @return BelongsTo
-     */
-    public function supplierCategory(): BelongsTo
-    {
-        return $this->belongsTo(SupplierCategory::class, 'supplier_category_id');
-    }
-
-    /**
-     * Get the purchases associated with the supplier.
+     * Get the phones for the supplier.
      *
      * @return HasMany
      */
-    public function purchases(): HasMany
+    public function phones(): HasMany
     {
-        return $this->hasMany(Purchase::class);
+        return $this->hasMany(SupplierPhone::class);
+    }
+
+    /**
+     * Get the emails for the supplier.
+     *
+     * @return HasMany
+     */
+    public function emails(): HasMany
+    {
+        return $this->hasMany(SupplierEmail::class);
+    }
+
+    /**
+     * Get the bank accounts for the supplier.
+     *
+     * @return HasMany
+     */
+    public function bankAccounts(): HasMany
+    {
+        return $this->hasMany(SupplierBankAccount::class);
     }
 }
