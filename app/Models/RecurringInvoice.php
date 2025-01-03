@@ -6,17 +6,18 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Class RecurringInvoice
  *
- * Represents a recurring invoice in the system.
+ * Represents a recurring invoice entity.
  *
  * @package App\Models
  */
 class RecurringInvoice extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     /**
      * The table associated with the model.
@@ -31,13 +32,13 @@ class RecurringInvoice extends Model
      * @var array
      */
     protected $fillable = [
-        'client_id',
-        'company_id',
-        'invoice_date',
+        'concept',
+        'date',
         'total_amount',
         'status',
-        'frequency',
         'next_invoice_date',
+        'company_id',
+        'client_id',
     ];
 
     /**
@@ -61,7 +62,7 @@ class RecurringInvoice extends Model
     }
 
     /**
-     * Get the lines associated with the recurring invoice.
+     * Get the lines for the recurring invoice.
      *
      * @return HasMany
      */

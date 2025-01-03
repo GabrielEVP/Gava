@@ -8,8 +8,6 @@ class RecurringInvoiceRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
-     *
-     * @return bool
      */
     public function authorize(): bool
     {
@@ -19,23 +17,26 @@ class RecurringInvoiceRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
         return [
+            'concept' => 'required|string|max:255',
+            'date' => 'required|date',
+            'total_amount' => 'required|numeric|min:0',
+            'status' => 'required|string|in:active,inactive',
+            'next_invoice_date' => 'required|date',
             'client_id' => 'required|exists:clients,id',
             'company_id' => 'required|exists:companies,id',
-            'invoice_date' => 'required|date',
-            'total_amount' => 'required|numeric',
-            'status' => 'required|string|max:255',
-            'frequency' => 'required|string|max:255',
-            'next_invoice_date' => 'required|date',
-            'lines' => 'required|array',
-            'lines.*.product_id' => 'required|exists:products,id',
-            'lines.*.quantity' => 'required|numeric',
-            'lines.*.unit_price' => 'required|numeric',
-            'lines.*.total_price' => 'required|numeric',
+            'lines' => 'nullable|array',
+            'lines.*.description' => 'required_with:lines|string',
+            'lines.*.quantity' => 'required_with:lines|integer|min:0',
+            'lines.*.unit_price' => 'required_with:lines|numeric|min:0',
+            'lines.*.vat_rate' => 'required_with:lines|numeric|min:0|max:100',
+            'lines.*.total_amount' => 'nullable|numeric|min:0',
+            'lines.*.total_amount_rate' => 'nullable|numeric|min:0',
+            'lines.*.product_id' => 'nullable|exists:products,id',
         ];
     }
 }

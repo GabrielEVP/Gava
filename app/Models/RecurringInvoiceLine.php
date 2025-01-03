@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 /**
  * Class RecurringInvoiceLine
  *
- * Represents a line item in a recurring invoice.
+ * Represents a recurring invoice line entity.
  *
  * @package App\Models
  */
@@ -30,15 +30,18 @@ class RecurringInvoiceLine extends Model
      * @var array
      */
     protected $fillable = [
-        'recurring_invoice_id',
-        'product_id',
+        'description',
         'quantity',
         'unit_price',
-        'total_price',
+        'vat_rate',
+        'total_amount',
+        'total_amount_rate',
+        'recurring_invoice_id',
+        'product_id',
     ];
 
     /**
-     * Get the recurring invoice that owns the line item.
+     * Get the recurring invoice that owns the line.
      *
      * @return BelongsTo
      */
@@ -48,7 +51,7 @@ class RecurringInvoiceLine extends Model
     }
 
     /**
-     * Get the product associated with the line item.
+     * Get the product associated with the line.
      *
      * @return BelongsTo
      */

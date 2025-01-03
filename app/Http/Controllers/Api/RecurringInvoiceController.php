@@ -5,121 +5,88 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RecurringInvoiceRequest;
 use App\Models\RecurringInvoice;
-use App\Models\RecurringInvoiceLine;
-use App\Models\Company;
 use Illuminate\Http\JsonResponse;
 
+/**
+ * Class RecurringInvoiceController
+ *
+ * Controller for handling recurring invoice-related operations.
+ */
 class RecurringInvoiceController extends Controller
 {
     /**
      * Display a listing of the recurring invoices.
      *
-     * @param string $company_id The ID of the company.
-     * @return JsonResponse The JSON response containing the list of recurring invoices.
+     * @return JsonResponse
      */
-    public function index(string $company_id): JsonResponse
+    public function index(): JsonResponse
     {
-        $company = Company::findOrFail($company_id);
-
-        if (auth()->user()->can('access', $company)) {
-            $recurringInvoices = $company->recurringInvoices->load('lines');
-            return response()->json($recurringInvoices, 200);
-        }
-
-        return response()->json(['message' => 'You don\'t have access to this Company'], 403);
+        $recurringInvoices = RecurringInvoice::with(['lines'])->get();
+        return response()->json($recurringInvoices, 200);
     }
 
     /**
      * Store a newly created recurring invoice in storage.
      *
-     * @param string $company_id The ID of the company.
-     * @param RecurringInvoiceRequest $request The request object containing the recurring invoice data.
-     * @return JsonResponse The JSON response containing the created recurring invoice.
+     * @param RecurringInvoiceRequest $request The request object containing recurring invoice data.
+     * @return JsonResponse
      */
-    public function store(string $company_id, RecurringInvoiceRequest $request): JsonResponse
+    public function store(RecurringInvoiceRequest $request): JsonResponse
     {
-        $company = Company::findOrFail($company_id);
+        $recurringInvoice = RecurringInvoice::create($request->all());
 
-        if (auth()->user()->can('access', $company)) {
-            $recurringInvoice = RecurringInvoice::create($request->validated());
-
-            foreach ($request->input('lines', []) as $line) {
-                $line['recurring_invoice_id'] = $recurringInvoice->id;
-                RecurringInvoiceLine::create($line);
-            }
-
-            return response()->json($recurringInvoice->load('lines'), 201);
+        $lines = $request->input('lines', []);
+        foreach ($lines as $line) {
+            $recurringInvoice->lines()->create($line);
         }
 
-        return response()->json(['message' => 'You don\'t have access to this Company'], 403);
+        return response()->json($recurringInvoice->load(['lines']), 201);
     }
 
     /**
      * Display the specified recurring invoice.
      *
-     * @param string $company_id The ID of the company.
-     * @param int $id The ID of the recurring invoice.
-     * @return JsonResponse The JSON response containing the recurring invoice.
+     * @param string $id The ID of the recurring invoice.
+     * @return JsonResponse
      */
-    public function show(string $company_id, int $id): JsonResponse
+    public function show(string $id): JsonResponse
     {
-        $company = Company::findOrFail($company_id);
-
-        if (auth()->user()->can('access', $company)) {
-            $recurringInvoice = RecurringInvoice::with('lines')->findOrFail($id);
-            return response()->json($recurringInvoice, 200);
-        }
-
-        return response()->json(['message' => 'You don\'t have access to this Company'], 403);
+        $recurringInvoice = RecurringInvoice::with(['lines'])->findOrFail($id);
+        return response()->json($recurringInvoice, 200);
     }
 
     /**
      * Update the specified recurring invoice in storage.
      *
-     * @param string $company_id The ID of the company.
-     * @param RecurringInvoiceRequest $request The request object containing the updated recurring invoice data.
-     * @param int $id The ID of the recurring invoice.
-     * @return JsonResponse The JSON response containing the updated recurring invoice.
+     * @param RecurringInvoiceRequest $request The request object containing updated recurring invoice data.
+     * @param string $id The ID of the recurring invoice.
+     * @return JsonResponse
      */
-    public function update(string $company_id, RecurringInvoiceRequest $request, int $id): JsonResponse
+    public function update(RecurringInvoiceRequest $request, string $id): JsonResponse
     {
-        $company = Company::findOrFail($company_id);
+        $recurringInvoice = RecurringInvoice::findOrFail($id);
+        $recurringInvoice->update($request->all());
 
-        if (auth()->user()->can('access', $company)) {
-            $recurringInvoice = RecurringInvoice::findOrFail($id);
-            $recurringInvoice->update($request->validated());
-
-            $recurringInvoice->lines()->delete();
-            foreach ($request->input('lines', []) as $line) {
-                $line['recurring_invoice_id'] = $recurringInvoice->id;
-                RecurringInvoiceLine::create($line);
-            }
-
-            return response()->json($recurringInvoice->load('lines'), 200);
+        $recurringInvoice->lines()->delete();
+        foreach ($request->input('lines', []) as $line) {
+            $recurringInvoice->lines()->create($line);
         }
 
-        return response()->json(['message' => 'You don\'t have access to this Company'], 403);
+        return response()->json($recurringInvoice->load(['lines']), 200);
     }
 
     /**
      * Remove the specified recurring invoice from storage.
      *
-     * @param string $company_id The ID of the company.
-     * @param int $id The ID of the recurring invoice.
-     * @return JsonResponse The JSON response confirming the deletion.
+     * @param string $id The ID of the recurring invoice.
+     * @return JsonResponse
      */
-    public function destroy(string $company_id, int $id): JsonResponse
+    public function destroy(string $id): JsonResponse
     {
-        $company = Company::findOrFail($company_id);
+        $recurringInvoice = RecurringInvoice::findOrFail($id);
+        $recurringInvoice->lines()->delete();
+        $recurringInvoice->delete();
 
-        if (auth()->user()->can('access', $company)) {
-            $recurringInvoice = RecurringInvoice::findOrFail($id);
-            $recurringInvoice->lines()->delete();
-            $recurringInvoice->delete();
-
-            return response()->json(['message' => 'RecurringInvoice deleted successfully'], 200);
-        }
-
-        return response()->json(['message' => 'You don\'t have access to this Company'], 403);
+        return response()->json(["message" => "Recurring Invoice With Id: {$id} Has Been Deleted"], 200);
     }
 }
