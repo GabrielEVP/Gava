@@ -6,17 +6,25 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Class Product
  *
- * Represents a product in the application.
+ * Represents a product entity.
  *
  * @package App\Models
  */
 class Product extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
+
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'products';
 
     /**
      * The attributes that are mass assignable.
@@ -49,13 +57,13 @@ class Product extends Model
     }
 
     /**
-     * Get the product category that the product belongs to.
+     * Get the category that the product belongs to.
      *
      * @return BelongsTo
      */
-    public function productCategory(): BelongsTo
+    public function category(): BelongsTo
     {
-        return $this->belongsTo(ProductCategory::class);
+        return $this->belongsTo(ProductCategory::class, 'product_category_id');
     }
 
     /**
@@ -69,7 +77,7 @@ class Product extends Model
     }
 
     /**
-     * Get the purchase associated with the product.
+     * Get the purchase that includes the product.
      *
      * @return BelongsTo
      */
@@ -79,11 +87,11 @@ class Product extends Model
     }
 
     /**
-     * Get the prices associated with the product.
+     * Get the prices for the product.
      *
      * @return HasMany
      */
-    public function productPrices(): HasMany
+    public function prices(): HasMany
     {
         return $this->hasMany(ProductPrice::class);
     }

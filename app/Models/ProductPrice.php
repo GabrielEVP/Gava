@@ -5,17 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Class ProductPrice
  *
- * Represents the price of a product in the application.
+ * Represents a product price entity.
  *
  * @package App\Models
  */
 class ProductPrice extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     /**
      * The table associated with the model.
@@ -46,7 +47,7 @@ class ProductPrice extends Model
     }
 
     /**
-     * Get the type of price.
+     * Get the type of price for the product price.
      *
      * @return BelongsTo
      */

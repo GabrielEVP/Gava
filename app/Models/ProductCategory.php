@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 /**
  * Class ProductCategory
  *
- * Represents a category of products in the application.
+ * Represents a product category entity.
  *
  * @package App\Models
  */
@@ -37,22 +37,22 @@ class ProductCategory extends Model
     ];
 
     /**
-     * Get the products associated with the product category.
-     *
-     * @return HasMany
-     */
-    public function products(): HasMany
-    {
-        return $this->hasMany(Product::class, 'product_category_id');
-    }
-
-    /**
-     * Get the company that owns the product category.
+     * Get the company that owns the category.
      *
      * @return BelongsTo
      */
     public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);
+    }
+
+    /**
+     * Get the products for the category.
+     *
+     * @return HasMany
+     */
+    public function products(): HasMany
+    {
+        return $this->hasMany(Product::class, 'product_category_id');
     }
 }
