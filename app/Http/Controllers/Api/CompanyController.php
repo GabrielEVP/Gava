@@ -21,7 +21,7 @@ class CompanyController extends Controller
      */
     public function index(): JsonResponse
     {
-        $companies = Company::where('user_id', auth()->id())->get();
+        $companies = Company::where('user_id', auth()->id())->with('bankAccounts')->get();
         return response()->json($companies, 200);
     }
 
@@ -38,7 +38,12 @@ class CompanyController extends Controller
             ['user_id' => auth()->id()]
         ));
 
-        return response()->json($company, 201);
+        $bankAccounts = $request->input('bank_accounts', []);
+        foreach ($bankAccounts as $bankAccount) {
+            $company->bankAccounts()->create($bankAccount);
+        }
+
+        return response()->json($company->load('bankAccounts'), 201);
     }
 
     /**
@@ -49,7 +54,7 @@ class CompanyController extends Controller
      */
     public function show(string $id): JsonResponse
     {
-        $company = Company::findOrFail($id);
+        $company = Company::with('bankAccounts')->findOrFail($id);
         return response()->json($company, 200);
     }
 
@@ -65,7 +70,12 @@ class CompanyController extends Controller
         $company = Company::findOrFail($id);
         $company->update($request->all());
 
-        return response()->json($company, 200);
+        $company->bankAccounts()->delete();
+        foreach ($request->input('bank_accounts', []) as $bankAccount) {
+            $company->bankAccounts()->create($bankAccount);
+        }
+
+        return response()->json($company->load('bankAccounts'), 200);
     }
 
     /**
@@ -77,6 +87,7 @@ class CompanyController extends Controller
     public function destroy(string $id): JsonResponse
     {
         $company = Company::findOrFail($id);
+        $company->bankAccounts()->delete();
         $company->delete();
 
         return response()->json(["message" => "Company With Id: {$id} Has Been Deleted"], 200);
