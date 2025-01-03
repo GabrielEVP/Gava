@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 /**
  * Class OrderLine
  *
- * Represents an individual line item in an order.
+ * Represents an order line entity.
  *
  * @package App\Models
  */
@@ -30,14 +30,18 @@ class OrderLine extends Model
      * @var array
      */
     protected $fillable = [
+        'description',
+        'quantity',
+        'unit_price',
+        'vat_rate',
+        'total_amount',
+        'total_amount_rate',
         'order_id',
         'product_id',
-        'quantity',
-        'price',
     ];
 
     /**
-     * Get the order that owns the order line.
+     * Get the order that owns the line.
      *
      * @return BelongsTo
      */
@@ -47,7 +51,7 @@ class OrderLine extends Model
     }
 
     /**
-     * Get the product associated with the order line.
+     * Get the product associated with the line.
      *
      * @return BelongsTo
      */

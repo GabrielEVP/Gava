@@ -8,8 +8,6 @@ class OrderRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
-     *
-     * @return bool
      */
     public function authorize(): bool
     {
@@ -19,17 +17,26 @@ class OrderRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
         return [
-            'order_date' => 'required|date',
-            'customer_id' => 'required|exists:customers,id',
-            'order_lines' => 'required|array',
-            'order_lines.*.product_id' => 'required|exists:products,id',
-            'order_lines.*.quantity' => 'required|integer|min:1',
-            'order_lines.*.price' => 'required|numeric|min:0',
+            'order_number' => 'required|string|max:255',
+            'concept' => 'required|string|max:255',
+            'date' => 'required|date',
+            'status' => 'required|string|in:pending,accept,refused',
+            'total_amount' => 'required|numeric|min:0',
+            'client_id' => 'required|exists:clients,id',
+            'company_id' => 'required|exists:companies,id',
+            'lines' => 'nullable|array',
+            'lines.*.description' => 'required_with:lines|string',
+            'lines.*.quantity' => 'required_with:lines|integer|min:0',
+            'lines.*.unit_price' => 'required_with:lines|numeric|min:0',
+            'lines.*.vat_rate' => 'required_with:lines|numeric|min:0|max:100',
+            'lines.*.total_amount' => 'nullable|numeric|min:0',
+            'lines.*.total_amount_rate' => 'nullable|numeric|min:0',
+            'lines.*.product_id' => 'nullable|exists:products,id',
         ];
     }
 }

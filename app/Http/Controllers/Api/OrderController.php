@@ -4,120 +4,89 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\OrderRequest;
-use App\Models\Company;
 use App\Models\Order;
-use App\Models\OrderLine;
 use Illuminate\Http\JsonResponse;
 
+/**
+ * Class OrderController
+ *
+ * Controller for handling order-related operations.
+ */
 class OrderController extends Controller
 {
     /**
      * Display a listing of the orders.
      *
-     * @param string $company_id The ID of the company.
-     * @return JsonResponse The JSON response containing the list of orders.
+     * @return JsonResponse
      */
-    public function index(string $company_id): JsonResponse
+    public function index(): JsonResponse
     {
-        $company = Company::findOrFail($company_id);
-
-        if (auth()->user()->can('access', $company)) {
-            $orders = $company->orders->load(['orderLines']);
-            return response()->json($orders, 200);
-        }
-
-        return response()->json(['message' => 'You dont have access this Company'], 403);
+        $orders = Order::with(['lines'])->get();
+        return response()->json($orders, 200);
     }
 
     /**
      * Store a newly created order in storage.
      *
-     * @param string $company_id The ID of the company.
-     * @param OrderRequest $request The request object containing the order data.
-     * @return JsonResponse The JSON response containing the created order.
+     * @param OrderRequest $request The request object containing order data.
+     * @return JsonResponse
      */
-    public function store(string $company_id, OrderRequest $request): JsonResponse
+    public function store(OrderRequest $request): JsonResponse
     {
-        $company = Company::findOrFail($company_id);
+        $order = Order::create($request->all());
 
-        if (auth()->user()->can('access', $company)) {
-            $order = Order::create($request->all());
-
-            foreach ($request->input('order_lines', []) as $line) {
-                OrderLine::create($line);
-            }
-
-            return response()->json($order->load(['orderLines']), 201);
+        $lines = $request->input('lines', []);
+        foreach ($lines as $line) {
+            $order->lines()->create($line);
         }
 
-        return response()->json(['message' => 'You dont have access this Company'], 403);
+        return response()->json($order->load(['lines']), 201);
     }
 
     /**
      * Display the specified order.
      *
-     * @param string $company_id The ID of the company.
      * @param string $id The ID of the order.
-     * @return JsonResponse The JSON response containing the order.
+     * @return JsonResponse
      */
-    public function show(string $company_id, string $id): JsonResponse
+    public function show(string $id): JsonResponse
     {
-        $company = Company::findOrFail($company_id);
-
-        if (auth()->user()->can('access', $company)) {
-            $order = Order::findOrFail($id);
-
-            return response()->json($order->load(['orderLines']), 200);
-        }
-
-        return response()->json(['message' => 'You dont have access this Company'], 403);
+        $order = Order::with(['lines'])->findOrFail($id);
+        return response()->json($order, 200);
     }
 
     /**
      * Update the specified order in storage.
      *
-     * @param string $company_id The ID of the company.
-     * @param OrderRequest $request The request object containing the updated order data.
+     * @param OrderRequest $request The request object containing updated order data.
      * @param string $id The ID of the order.
-     * @return JsonResponse The JSON response containing the updated order.
+     * @return JsonResponse
      */
-    public function update(string $company_id, OrderRequest $request, string $id): JsonResponse
+    public function update(OrderRequest $request, string $id): JsonResponse
     {
-        $company = Company::findOrFail($company_id);
+        $order = Order::findOrFail($id);
+        $order->update($request->all());
 
-        if (auth()->user()->can('access', $company)) {
-            $order = Order::findOrFail($id);
-            $order->update($request->all());
-
-            $order->orderLines()->delete();
-            foreach ($request->input('order_lines', []) as $line) {
-                OrderLine::create($line);
-            }
-
-            return response()->json($order->load(['orderLines']), 200);
+        $order->lines()->delete();
+        foreach ($request->input('lines', []) as $line) {
+            $order->lines()->create($line);
         }
 
-        return response()->json(['message' => 'You dont have access this Company'], 403);
+        return response()->json($order->load(['lines']), 200);
     }
 
     /**
      * Remove the specified order from storage.
      *
-     * @param string $company_id The ID of the company.
      * @param string $id The ID of the order.
-     * @return JsonResponse The JSON response confirming the deletion.
+     * @return JsonResponse
      */
-    public function destroy(string $company_id, string $id): JsonResponse
+    public function destroy(string $id): JsonResponse
     {
-        $company = Company::findOrFail($company_id);
+        $order = Order::findOrFail($id);
+        $order->lines()->delete();
+        $order->delete();
 
-        if (auth()->user()->can('access', $company)) {
-            $order = Order::findOrFail($id);
-            $order->orderLines()->delete();
-            $order->delete();
-
-            return response()->json(["message" => "Order With Id: {$id} Has Been Deleted"], 200);
-        }
-        return response()->json(['message' => 'You dont have access this Company'], 403);
+        return response()->json(["message" => "Order With Id: {$id} Has Been Deleted"], 200);
     }
 }
