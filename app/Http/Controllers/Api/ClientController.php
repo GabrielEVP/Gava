@@ -25,7 +25,7 @@ class ClientController extends Controller
         $company = Company::findOrFail($company_id);
 
         if (auth()->user()->can('access', $company)) {
-            $clients = $company->clients->load(['phones', 'emails']);
+            $clients = $company->clients->load(['phones', 'emails', 'bankAccounts']);
             return response()->json($clients, 200);
         }
 
@@ -56,7 +56,12 @@ class ClientController extends Controller
                 $client->emails()->create($email);
             }
 
-            return response()->json($client->load(['phones', 'emails']), 201);
+            $bankAccounts = $request->input('bank_accounts', []);
+            foreach ($bankAccounts as $bankAccount) {
+                $client->bankAccounts()->create($bankAccount);
+            }
+
+            return response()->json($client->load(['phones', 'emails', 'bankAccounts']), 201);
         }
 
         return response()->json(['message' => 'You dont have access this Company'], 403);
@@ -74,7 +79,7 @@ class ClientController extends Controller
         $company = Company::findOrFail($company_id);
 
         if (auth()->user()->can('access', $company)) {
-            $client = $company->clients()->with(['phones', 'emails'])->findOrFail($id);
+            $client = $company->clients()->with(['phones', 'emails', 'bankAccounts'])->findOrFail($id);
 
             return response()->json($client, 200);
         }
@@ -108,7 +113,12 @@ class ClientController extends Controller
                 $client->emails()->create($email);
             }
 
-            return response()->json($client->load(['phones', 'emails']), 201);
+            $client->bankAccounts()->delete();
+            foreach ($request->input('bank_accounts', []) as $bankAccount) {
+                $client->bankAccounts()->create($bankAccount);
+            }
+
+            return response()->json($client->load(['phones', 'emails', 'bankAccounts']), 201);
         }
         return response()->json(['message' => 'You dont have access this Company'], 403);
     }
@@ -128,6 +138,7 @@ class ClientController extends Controller
             $client = $company->clients()->findOrFail($id);
             $client->phones()->delete();
             $client->emails()->delete();
+            $client->bankAccounts()->delete();
             $client->delete();
             return response()->json(["message" => "Client With Id: {$id} Has Been Deleted"], 200);
         }

@@ -32,22 +32,21 @@ class Client extends Model
      * @var array
      */
     protected $fillable = [
-        'name',
-        'legal_name',
-        'vat_number',
+        'code_number',
         'registration_number',
-        'email',
-        'phone',
+        'legal_name',
+        'type_client',
         'website',
         'address',
         'city',
         'state',
+        'municipality',
         'postal_code',
         'country',
-        'currency',
+        'credit_day_limit',
+        'limit_credit',
         'tax_rate',
-        'payment_terms',
-        'contact_person',
+        'discount',
         'notes',
         'company_id',
     ];
@@ -83,22 +82,12 @@ class Client extends Model
     }
 
     /**
-     * Get the invoices for the client.
+     * Get the bank accounts for the client.
      *
      * @return HasMany
      */
-    public function invoices(): HasMany
+    public function bankAccounts(): HasMany
     {
-        return $this->hasMany(Invoice::class);
-    }
-
-    /**
-     * Get the orders for the client.
-     *
-     * @return HasMany
-     */
-    public function orders(): HasMany
-    {
-        return $this->hasMany(Order::class);
+        return $this->hasMany(ClientBankAccount::class);
     }
 }
