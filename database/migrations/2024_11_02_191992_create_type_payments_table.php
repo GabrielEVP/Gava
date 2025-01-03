@@ -13,8 +13,6 @@ return new class extends Migration {
             $table->string('name');
             $table->string('description')->nullable();
             $table->timestamps();
-            $table->unsignedBigInteger('company_id')->nullable();
-            $table->foreign('company_id')->references('id')->on('companies')->onDelete('set null');
         });
     }
 

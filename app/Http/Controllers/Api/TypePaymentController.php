@@ -6,8 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\TypePaymentRequest;
 use App\Models\TypePayment;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
+/**
+ * Class TypePaymentController
+ *
+ * Controller for handling type payment-related operations.
+ */
 class TypePaymentController extends Controller
 {
     /**
@@ -24,22 +28,23 @@ class TypePaymentController extends Controller
     /**
      * Store a newly created type payment in storage.
      *
-     * @param TypePaymentRequest $request
+     * @param TypePaymentRequest $request The request object containing type payment data.
      * @return JsonResponse
      */
     public function store(TypePaymentRequest $request): JsonResponse
     {
-        $typePayment = TypePayment::create($request->validated());
+        $typePayment = TypePayment::create($request->all());
+
         return response()->json($typePayment, 201);
     }
 
     /**
      * Display the specified type payment.
      *
-     * @param int $id
+     * @param string $id The ID of the type payment.
      * @return JsonResponse
      */
-    public function show(int $id): JsonResponse
+    public function show(string $id): JsonResponse
     {
         $typePayment = TypePayment::findOrFail($id);
         return response()->json($typePayment, 200);
@@ -48,27 +53,29 @@ class TypePaymentController extends Controller
     /**
      * Update the specified type payment in storage.
      *
-     * @param TypePaymentRequest $request
-     * @param int $id
+     * @param TypePaymentRequest $request The request object containing updated type payment data.
+     * @param string $id The ID of the type payment.
      * @return JsonResponse
      */
-    public function update(TypePaymentRequest $request, int $id): JsonResponse
+    public function update(TypePaymentRequest $request, string $id): JsonResponse
     {
         $typePayment = TypePayment::findOrFail($id);
-        $typePayment->update($request->validated());
+        $typePayment->update($request->all());
+
         return response()->json($typePayment, 200);
     }
 
     /**
      * Remove the specified type payment from storage.
      *
-     * @param int $id
+     * @param string $id The ID of the type payment.
      * @return JsonResponse
      */
-    public function destroy(int $id): JsonResponse
+    public function destroy(string $id): JsonResponse
     {
         $typePayment = TypePayment::findOrFail($id);
         $typePayment->delete();
-        return response()->json(['message' => 'TypePayment deleted successfully'], 200);
+
+        return response()->json(["message" => "Type Payment With Id: {$id} Has Been Deleted"], 200);
     }
 }
