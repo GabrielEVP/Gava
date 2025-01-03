@@ -8,8 +8,6 @@ class InvoiceRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
-     *
-     * @return bool
      */
     public function authorize(): bool
     {
@@ -19,26 +17,31 @@ class InvoiceRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
         return [
             'invoice_number' => 'required|string|max:255',
-            'issue_date' => 'required|date',
+            'concept' => 'required|string|max:255',
+            'date' => 'required|date',
+            'status' => 'required|string|in:pending,paid,overdue',
             'total_amount' => 'required|numeric|min:0',
-            'tax_amount' => 'required|numeric|min:0',
-            'status' => 'required|string|max:255',
             'client_id' => 'required|exists:clients,id',
-            'lines' => 'required|array',
-            'lines.*.product_id' => 'required|exists:products,id',
-            'lines.*.quantity' => 'required|integer|min:1',
-            'lines.*.price' => 'required|numeric|min:0',
-            'due_dates' => 'required|array',
-            'due_dates.*.due_date' => 'required|date',
-            'payments' => 'required|array',
-            'payments.*.payment_date' => 'required|date',
-            'payments.*.amount' => 'required|numeric|min:0',
+            'company_id' => 'required|exists:companies,id',
+            'lines' => 'nullable|array',
+            'lines.*.description' => 'required_with:lines|string',
+            'lines.*.quantity' => 'required_with:lines|integer|min:0',
+            'lines.*.unit_price' => 'required_with:lines|numeric|min:0',
+            'lines.*.vat_rate' => 'required_with:lines|numeric|min:0|max:100',
+            'payments' => 'nullable|array',
+            'payments.*.payment_date' => 'required_with:payments|date',
+            'payments.*.amount' => 'required_with:payments|numeric|min:0',
+            'payments.*.status' => 'required_with:payments|string|in:pending,paid,overdue',
+            'payments.*.type_payment_id' => 'required_with:payments|exists:type_payments,id',
+            'due_dates' => 'nullable|array',
+            'due_dates.*.due_date' => 'required_with:due_dates|date',
+            'due_dates.*.amount' => 'required_with:due_dates|numeric|min:0',
         ];
     }
 }

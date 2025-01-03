@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 /**
  * Class InvoicePayment
  *
- * Represents a payment made towards an invoice.
+ * Represents an invoice payment entity.
  *
  * @package App\Models
  */
@@ -32,6 +32,7 @@ class InvoicePayment extends Model
     protected $fillable = [
         'payment_date',
         'amount',
+        'status',
         'invoice_id',
         'type_payment_id',
     ];
@@ -47,7 +48,7 @@ class InvoicePayment extends Model
     }
 
     /**
-     * Get the type of payment.
+     * Get the type of payment for the invoice payment.
      *
      * @return BelongsTo
      */

@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 /**
  * Class InvoiceLine
  *
- * Represents a line item in an invoice.
+ * Represents an invoice line entity.
  *
  * @package App\Models
  */
@@ -33,14 +33,15 @@ class InvoiceLine extends Model
         'description',
         'quantity',
         'unit_price',
-        'tax_rate',
-        'total',
+        'vat_rate',
+        'total_amount',
+        'total_amount_rate',
         'invoice_id',
         'product_id',
     ];
 
     /**
-     * Get the invoice that owns the line item.
+     * Get the invoice that owns the line.
      *
      * @return BelongsTo
      */
@@ -50,7 +51,7 @@ class InvoiceLine extends Model
     }
 
     /**
-     * Get the product associated with the line item.
+     * Get the product associated with the line.
      *
      * @return BelongsTo
      */

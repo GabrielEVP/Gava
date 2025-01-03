@@ -6,17 +6,18 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Class Invoice
  *
- * Represents an invoice in the system.
+ * Represents an invoice entity.
  *
  * @package App\Models
  */
 class Invoice extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     /**
      * The table associated with the model.
@@ -32,8 +33,10 @@ class Invoice extends Model
      */
     protected $fillable = [
         'invoice_number',
-        'issue_date',
+        'concept',
+        'date',
         'status',
+        'total_amount',
         'client_id',
         'company_id',
     ];

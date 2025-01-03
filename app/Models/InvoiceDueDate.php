@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 /**
  * Class InvoiceDueDate
  *
- * Represents a due date for an invoice.
+ * Represents an invoice due date entity.
  *
  * @package App\Models
  */
@@ -30,10 +30,9 @@ class InvoiceDueDate extends Model
      * @var array
      */
     protected $fillable = [
-        'invoice_id',
         'due_date',
         'amount',
-        'status',
+        'invoice_id',
     ];
 
     /**
