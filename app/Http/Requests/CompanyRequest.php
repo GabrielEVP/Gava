@@ -22,26 +22,27 @@ class CompanyRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'nullable|string|max:255',
+            'code_number' => 'required|string|max:255',
+            'registration_number' => 'required|string|max:255',
             'legal_name' => 'required|string|max:255',
-            'vat_number' => 'nullable|string|max:50',
-            'registration_number' => 'nullable|string|max:50',
+            'name' => 'nullable|string|max:255',
             'email' => 'nullable|string|email|max:255',
             'phone' => 'nullable|string|max:20',
             'website' => 'nullable|string|max:255',
             'address' => 'nullable|string|max:255',
             'city' => 'required|string|max:100',
             'state' => 'required|string|max:100',
+            'municipality' => 'nullable|string|max:100',
             'postal_code' => 'required|string|max:20',
             'country' => 'required|string|max:100',
-            'currency' => 'nullable|string|max:10',
-            'bank_account' => 'nullable|string|max:50',
-            'invoice_prefix' => 'nullable|string|max:10',
-            'status' => 'nullable|string|max:50',
             'logo_url' => 'nullable|string|max:255',
-            'industry' => 'nullable|string|max:100',
-            'number_of_employees' => 'nullable|integer',
+            'status' => 'nullable|string|in:active,inactive',
             'notes' => 'nullable|string',
+            'user_id' => 'nullable|exists:users,id',
+            'bank_accounts' => 'nullable|array',
+            'bank_accounts.*.bank_name' => 'required_with:bank_accounts|string|max:255',
+            'bank_accounts.*.account_number' => 'required_with:bank_accounts|string|max:255',
+            'bank_accounts.*.account_type' => 'required_with:bank_accounts|string|max:255',
         ];
     }
 }
