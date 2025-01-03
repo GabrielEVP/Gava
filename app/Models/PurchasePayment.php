@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 /**
  * Class PurchasePayment
  *
- * Represents a payment made for a purchase.
+ * Represents a purchase payment entity.
  *
  * @package App\Models
  */
@@ -37,7 +37,7 @@ class PurchasePayment extends Model
     ];
 
     /**
-     * Get the purchase associated with the payment.
+     * Get the purchase that owns the payment.
      *
      * @return BelongsTo
      */
@@ -47,7 +47,7 @@ class PurchasePayment extends Model
     }
 
     /**
-     * Get the type of payment associated with the payment.
+     * Get the type of payment for the purchase payment.
      *
      * @return BelongsTo
      */

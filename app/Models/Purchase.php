@@ -6,17 +6,18 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Class Purchase
  *
- * Represents a purchase in the application.
+ * Represents a purchase entity.
  *
  * @package App\Models
  */
 class Purchase extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     /**
      * The table associated with the model.
@@ -31,9 +32,11 @@ class Purchase extends Model
      * @var array
      */
     protected $fillable = [
-        'purchase_date',
-        'total_amount',
+        'purchase_number',
+        'concept',
+        'date',
         'status',
+        'total_amount',
         'supplier_id',
         'company_id',
     ];
@@ -49,7 +52,27 @@ class Purchase extends Model
     }
 
     /**
-     * Get the payments associated with the purchase.
+     * Get the company that owns the purchase.
+     *
+     * @return BelongsTo
+     */
+    public function company(): BelongsTo
+    {
+        return $this->belongsTo(Company::class);
+    }
+
+    /**
+     * Get the lines for the purchase.
+     *
+     * @return HasMany
+     */
+    public function lines(): HasMany
+    {
+        return $this->hasMany(PurchaseLine::class);
+    }
+
+    /**
+     * Get the payments for the purchase.
      *
      * @return HasMany
      */
@@ -59,7 +82,7 @@ class Purchase extends Model
     }
 
     /**
-     * Get the due dates associated with the purchase.
+     * Get the due dates for the purchase.
      *
      * @return HasMany
      */

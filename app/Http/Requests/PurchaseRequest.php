@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class PurchaseRequest extends FormRequest
@@ -18,26 +17,30 @@ class PurchaseRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, ValidationRule|array|string>
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
         return [
-            'purchase_date' => 'required|date',
+            'purchase_number' => 'required|string|max:255',
+            'concept' => 'required|string|max:255',
+            'date' => 'required|date',
+            'status' => 'required|string|in:pending,paid,overdue',
             'total_amount' => 'required|numeric|min:0',
-            'status' => 'required|string',
             'supplier_id' => 'required|exists:suppliers,id',
             'company_id' => 'required|exists:companies,id',
-            'purchase_lines' => 'required|array',
-            'purchase_lines.*.concept' => 'required|string|max:255',
-            'purchase_lines.*.description' => 'required|string',
-            'purchase_lines.*.quantity' => 'required|numeric|min:0',
-            'purchase_lines.*.unit_price' => 'required|numeric|min:0',
-            'purchase_lines.*.vat_rate' => 'required|numeric|min:0|max:100',
-            'purchase_lines.*.total_amount' => 'required|numeric|min:0',
-            'purchase_lines.*.total_amount_rate' => 'required|numeric|min:0',
-            'purchase_lines.*.product_id' => 'nullable|exists:products,id',
-            'purchase_lines.*.purchase_id' => 'required|exists:purchases,id',
+            'lines' => 'nullable|array',
+            'lines.*.description' => 'required_with:lines|string',
+            'lines.*.quantity' => 'required_with:lines|numeric|min:0',
+            'lines.*.unit_price' => 'required_with:lines|numeric|min:0',
+            'lines.*.vat_rate' => 'required_with:lines|numeric|min:0|max:100',
+            'payments' => 'nullable|array',
+            'payments.*.payment_date' => 'required_with:payments|date',
+            'payments.*.amount' => 'required_with:payments|numeric|min:0',
+            'payments.*.type_payment_id' => 'required_with:payments|exists:type_payments,id',
+            'due_dates' => 'nullable|array',
+            'due_dates.*.due_date' => 'required_with:due_dates|date',
+            'due_dates.*.amount' => 'required_with:due_dates|numeric|min:0',
         ];
     }
 }

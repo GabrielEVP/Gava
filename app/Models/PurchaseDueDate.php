@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 /**
  * Class PurchaseDueDate
  *
- * Represents a due date for a purchase.
+ * Represents a purchase due date entity.
  *
  * @package App\Models
  */
@@ -30,17 +30,17 @@ class PurchaseDueDate extends Model
      * @var array
      */
     protected $fillable = [
-        'purchase_id',
         'due_date',
         'amount',
+        'purchase_id',
     ];
 
     /**
-     * Get the purchase associated with the due date.
+     * Get the purchase that owns the due date.
      *
      * @return BelongsTo
      */
-    public function purchase()
+    public function purchase(): BelongsTo
     {
         return $this->belongsTo(Purchase::class);
     }

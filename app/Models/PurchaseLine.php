@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 /**
  * Class PurchaseLine
  *
- * Represents a line item in a purchase.
+ * Represents a purchase line entity.
  *
  * @package App\Models
  */
@@ -22,7 +22,7 @@ class PurchaseLine extends Model
      *
      * @var string
      */
-    protected $table = 'table_purchase_lines';
+    protected $table = 'purchase_lines';
 
     /**
      * The attributes that are mass assignable.
@@ -30,29 +30,15 @@ class PurchaseLine extends Model
      * @var array
      */
     protected $fillable = [
-        'concept',
         'description',
         'quantity',
         'unit_price',
         'vat_rate',
-        'total_amount',
-        'total_amount_rate',
-        'product_id',
         'purchase_id',
     ];
 
     /**
-     * Get the product associated with the purchase line.
-     *
-     * @return BelongsTo
-     */
-    public function product(): BelongsTo
-    {
-        return $this->belongsTo(Product::class);
-    }
-
-    /**
-     * Get the purchase associated with the purchase line.
+     * Get the purchase that owns the line.
      *
      * @return BelongsTo
      */
