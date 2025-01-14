@@ -21,7 +21,7 @@ class SupplierController extends Controller
      */
     public function index(): JsonResponse
     {
-        $suppliers = Supplier::all(); // No filtra por company_id
+        $suppliers = Supplier::all();
         return response()->json($suppliers, 200);
     }
 
@@ -33,10 +33,8 @@ class SupplierController extends Controller
      */
     public function store(SupplierRequest $request): JsonResponse
     {
-        // Crea el proveedor sin la dependencia de una compañía
         $supplier = Supplier::create($request->all());
 
-        // Crea los teléfonos, correos y cuentas bancarias relacionados con el proveedor
         $phones = $request->input('phones', []);
         foreach ($phones as $phone) {
             $supplier->phones()->create($phone);
@@ -52,7 +50,7 @@ class SupplierController extends Controller
             $supplier->bankAccounts()->create($bankAccount);
         }
 
-        return response()->json($supplier->load(['phones', 'emails', 'bankAccounts']), 201);
+        return response()->json($supplier->load(['phones', 'emails', 'bankAccounts']), 200);
     }
 
     /**
@@ -63,7 +61,6 @@ class SupplierController extends Controller
      */
     public function show(string $id): JsonResponse
     {
-        // Muestra el proveedor junto con los teléfonos, correos y cuentas bancarias
         $supplier = Supplier::with(['phones', 'emails', 'bankAccounts'])->findOrFail($id);
         return response()->json($supplier, 200);
     }
@@ -77,11 +74,9 @@ class SupplierController extends Controller
      */
     public function update(SupplierRequest $request, string $id): JsonResponse
     {
-        // Encuentra el proveedor por su ID
         $supplier = Supplier::findOrFail($id);
         $supplier->update($request->all());
 
-        // Elimina los datos previos y agrega los nuevos
         $supplier->phones()->delete();
         foreach ($request->input('phones', []) as $phone) {
             $supplier->phones()->create($phone);
@@ -108,7 +103,6 @@ class SupplierController extends Controller
      */
     public function destroy(string $id): JsonResponse
     {
-        // Encuentra y elimina el proveedor y sus relaciones
         $supplier = Supplier::findOrFail($id);
         $supplier->phones()->delete();
         $supplier->emails()->delete();
@@ -126,7 +120,6 @@ class SupplierController extends Controller
      */
     public function search(string $query): JsonResponse
     {
-        // Busca proveedores basados en el nombre legal
         $suppliers = Supplier::with(['phones', 'emails', 'bankAccounts'])
             ->where('legal_name', 'LIKE', "%{$query}%")
             ->get();

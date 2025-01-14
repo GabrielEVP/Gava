@@ -10,18 +10,6 @@ use Illuminate\Http\JsonResponse;
 /**
  * Class ClientController
  *
- * Controller for handling client-related operations within a company.
- */
-namespace App\Http\Controllers\Api;
-
-use App\Http\Controllers\Controller;
-use App\Http\Requests\ClientRequest;
-use App\Models\Client;
-use Illuminate\Http\JsonResponse;
-
-/**
- * Class ClientController
- *
  * Controller for handling client-related operations.
  */
 class ClientController extends Controller
@@ -33,7 +21,7 @@ class ClientController extends Controller
      */
     public function index(): JsonResponse
     {
-        $clients = Client::all(); // Ya no se filtra por company_id
+        $clients = Client::all();
         return response()->json($clients, 200);
     }
 
@@ -45,7 +33,6 @@ class ClientController extends Controller
      */
     public function store(ClientRequest $request): JsonResponse
     {
-        // Elimina la dependencia de Company
         $client = Client::create($request->all());
 
         $phones = $request->input('phones', []);
@@ -63,7 +50,7 @@ class ClientController extends Controller
             $client->bankAccounts()->create($bankAccount);
         }
 
-        return response()->json($client->load(['phones', 'emails', 'bankAccounts']), 201);
+        return response()->json($client->load(['phones', 'emails', 'bankAccounts']), 200);
     }
 
     /**
