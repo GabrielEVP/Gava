@@ -3,23 +3,14 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ClientController;
 use App\Http\Controllers\Api\CompanyController;
-use App\Http\Controllers\Api\ExpenseTypeController;
 use App\Http\Controllers\Api\InvoiceController;
 use App\Http\Controllers\Api\OrderController;
-use App\Http\Controllers\Api\ProductCategoryController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\SupplierController;
-use App\Http\Controllers\Api\SupplierCategoryController;
 use App\Http\Controllers\Api\TypePaymentController;
 use App\Http\Controllers\Api\TypePriceController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use Laravel\Passport\Http\Controllers\AccessTokenController;
-use Laravel\Passport\Http\Controllers\AuthorizationController;
-use Laravel\Passport\Http\Controllers\ApproveAuthorizationController;
-use Laravel\Passport\Http\Controllers\DenyAuthorizationController;
-use Laravel\Passport\Http\Controllers\PersonalAccessTokenController;
-use Laravel\Passport\Http\Controllers\TransientTokenController;
 
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
@@ -28,19 +19,19 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::middleware('auth:sanctum')->group(function() {
+Route::middleware('auth:sanctum')->group(function () {
     Route::post('changePassword', [AuthController::class, 'changePassword']);
     Route::post('logout', [AuthController::class, 'logout']);
 
     Route::resource('companies', CompanyController::class);
-    Route::resource('{company_id}/clients', ClientController::class);
-    Route::resource('{company_id}/productCategories', ProductCategoryController::class);
-    Route::resource('{company_id}/products', ProductController::class);
-    Route::resource('{company_id}/typePayments', TypePaymentController::class);
-    Route::resource('{company_id}/typePrices', TypePriceController::class);
-    Route::resource('{company_id}/supplier', SupplierController::class);
-    Route::resource('{company_id}/supplierCategory', SupplierCategoryController::class);
-    Route::resource('{company_id}/expenseType', ExpenseTypeController::class);
-    Route::resource('{company_id}/order', OrderController::class);
-    Route::resource('{company_id}/invoices', InvoiceController::class);
+    Route::resource('/clients', ClientController::class);
+    Route::resource('/products', ProductController::class);
+    Route::resource('/typePayments', TypePaymentController::class);
+    Route::resource('/typePrices', TypePriceController::class);
+    Route::resource('/supplier', SupplierController::class);
+    Route::resource('/order', OrderController::class);
+    Route::resource('/invoices', InvoiceController::class);
+
+    Route::get('/clients/search/{query}', [ClientController::class, 'search']);
+    Route::get('/suppliers/search/{query}', [SupplierController::class, 'search']);
 });
