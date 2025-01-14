@@ -28,7 +28,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::resource('/products', ProductController::class);
     Route::resource('/typePayments', TypePaymentController::class);
     Route::resource('/typePrices', TypePriceController::class);
-    Route::resource('/supplier', SupplierController::class);
+    Route::resource('/suppliers', SupplierController::class);
     Route::resource('/order', OrderController::class);
     Route::resource('/invoices', InvoiceController::class);
 
