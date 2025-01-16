@@ -18,7 +18,6 @@ return new class extends Migration {
             $table->decimal('vat_rate', 5, 2)->default(0.00);
             $table->decimal('stock_quantity', 10, 2)->default(0);
             $table->integer('units_per_box')->default(1);
-            $table->timestamps();
             $table->unsignedBigInteger('company_id')->nullable();
             $table->unsignedBigInteger('product_category_id')->nullable();
             $table->unsignedBigInteger('supplier_id')->nullable();

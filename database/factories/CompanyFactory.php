@@ -15,7 +15,6 @@ class CompanyFactory extends Factory
         return [
             'name' => $this->faker->company(),
             'legal_name' => $this->faker->companySuffix(),
-            'vat_number' => $this->faker->regexify('[A-Z]{2}[0-9]{9}'),
             'registration_number' => $this->faker->unique()->numerify('REG-#####'),
             'email' => $this->faker->companyEmail(),
             'phone' => $this->faker->phoneNumber(),
@@ -25,7 +24,6 @@ class CompanyFactory extends Factory
             'state' => $this->faker->state(),
             'postal_code' => $this->faker->postcode(),
             'country' => $this->faker->country(),
-            'currency' => $this->faker->currencyCode(),
             'bank_account' => $this->faker->bankAccountNumber(),
             'invoice_prefix' => $this->faker->lexify('INV-???'),
             'status' => $this->faker->randomElement(['active', 'inactive']),

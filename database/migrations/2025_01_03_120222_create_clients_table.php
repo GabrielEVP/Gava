@@ -21,7 +21,7 @@ return new class extends Migration {
             $table->string('municipality')->nullable();
             $table->string('postal_code')->nullable();
             $table->string('country')->nullable();
-            $table->int('credit_day_limit', 5)->nullable();
+            $table->integer('credit_day_limit')->nullable();
             $table->decimal('limit_credit', 5, 2)->nullable();
             $table->decimal('tax_rate', 5, 2)->nullable();
             $table->decimal('discount', 5, 2)->nullable();
@@ -37,7 +37,7 @@ return new class extends Migration {
             $table->enum('type', ['landline', 'mobile']);
             $table->string('phone');
             $table->unsignedBigInteger('client_id');
-            $table->foreign('client_id')->references('id')->on('clients')->onDelete('cascade');
+            $table->foreign('client_id')->references(columns: 'id')->on('clients')->onDelete('cascade');
             $table->timestamps();
         });
 

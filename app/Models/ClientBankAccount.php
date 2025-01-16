@@ -30,6 +30,7 @@ class ClientBankAccount extends Model
      * @var array
      */
     protected $fillable = [
+        'bank_name',
         'account_number',
         'account_type',
         'client_id',

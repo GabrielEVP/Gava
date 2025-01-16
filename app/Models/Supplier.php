@@ -35,7 +35,7 @@ class Supplier extends Model
         'code_number',
         'registration_number',
         'legal_name',
-        'type_client',
+        'type_supplier',
         'website',
         'address',
         'city',
