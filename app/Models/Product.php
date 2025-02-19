@@ -41,7 +41,6 @@ class Product extends Model
         'stock_quantity',
         'units_per_box',
         'company_id',
-        'product_category_id',
         'supplier_id',
         'purchase_id',
     ];
@@ -56,15 +55,6 @@ class Product extends Model
         return $this->belongsTo(Company::class);
     }
 
-    /**
-     * Get the category that the product belongs to.
-     *
-     * @return BelongsTo
-     */
-    public function category(): BelongsTo
-    {
-        return $this->belongsTo(ProductCategory::class, 'product_category_id');
-    }
 
     /**
      * Get the supplier that provides the product.
@@ -84,6 +74,16 @@ class Product extends Model
     public function purchase(): BelongsTo
     {
         return $this->belongsTo(Purchase::class);
+    }
+
+    /**
+     * Get the category that the product belongs to.
+     *
+     * @return BelongsTo
+     */
+    public function categories(): HasMany
+    {
+        return $this->hasMany(ProductCategory::class, 'category_id');
     }
 
     /**

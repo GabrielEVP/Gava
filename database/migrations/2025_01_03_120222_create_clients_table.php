@@ -32,21 +32,20 @@ return new class extends Migration {
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
         });
 
-        Schema::create('client_phones', function (Blueprint $table) {
-            $table->id();
-            $table->enum('type', ['landline', 'mobile']);
-            $table->string('phone');
-            $table->unsignedBigInteger('client_id');
-            $table->foreign('client_id')->references(columns: 'id')->on('clients')->onDelete('cascade');
-            $table->timestamps();
-        });
-
         Schema::create('client_emails', function (Blueprint $table) {
             $table->id();
-            $table->enum('type', ['personal', 'work'])->default('work');
             $table->string('email');
             $table->unsignedBigInteger('client_id');
             $table->foreign('client_id')->references('id')->on('clients')->onDelete('cascade');
+            $table->timestamps();
+        });
+
+        Schema::create('client_phones', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->string('phone');
+            $table->unsignedBigInteger('client_id');
+            $table->foreign('client_id')->references(columns: 'id')->on('clients')->onDelete('cascade');
             $table->timestamps();
         });
 
@@ -54,7 +53,6 @@ return new class extends Migration {
             $table->id();
             $table->string('bank_name');
             $table->string('account_number');
-            $table->string('account_type');
             $table->unsignedBigInteger('client_id');
             $table->foreign('client_id')->references('id')->on('clients')->onDelete('cascade');
             $table->timestamps();

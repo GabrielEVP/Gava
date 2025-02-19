@@ -40,16 +40,12 @@ class ClientRequest extends FormRequest
             'discount' => 'nullable|numeric|min:0|max:100',
             'notes' => 'nullable|string',
             'company_id' => 'nullable|exists:companies,id',
-            'phones' => 'nullable|array',
-            'phones.*.type' => 'required_with:phones|string|in:landline,mobile',
+            'phones.*.name' => 'required_with:phones|string|max:20',
             'phones.*.phone' => 'required_with:phones|string|max:20',
             'emails' => 'nullable|array',
-            'emails.*.type' => 'required_with:emails|string|in:personal,work',
             'emails.*.email' => 'required_with:emails|string|email|max:255',
             'bank_accounts' => 'nullable|array',
-            'bank_accounts.*.bank_name' => 'required_with:bank_accounts|string|max:255',
             'bank_accounts.*.account_number' => 'required_with:bank_accounts|string|max:255',
-            'bank_accounts.*.account_type' => 'required_with:bank_accounts|string|max:255',
         ];
     }
 
@@ -100,16 +96,10 @@ class ClientRequest extends FormRequest
             'notes.string' => 'Las notas deben ser una cadena de texto.',
             'company_id.exists' => 'La compañía seleccionada no existe.',
             'phones.array' => 'Los teléfonos deben ser un arreglo.',
-            'phones.*.type.required_with' => 'El tipo de teléfono es obligatorio cuando se proporciona un teléfono.',
-            'phones.*.type.string' => 'El tipo de teléfono debe ser una cadena de texto.',
-            'phones.*.type.in' => 'El tipo de teléfono debe ser "landline" o "mobile".',
             'phones.*.phone.required_with' => 'El número de teléfono es obligatorio cuando se proporciona un tipo de teléfono.',
             'phones.*.phone.string' => 'El número de teléfono debe ser una cadena de texto.',
             'phones.*.phone.max' => 'El número de teléfono no puede tener más de 20 caracteres.',
             'emails.array' => 'Los correos electrónicos deben ser un arreglo.',
-            'emails.*.type.required_with' => 'El tipo de correo electrónico es obligatorio cuando se proporciona un correo electrónico.',
-            'emails.*.type.string' => 'El tipo de correo electrónico debe ser una cadena de texto.',
-            'emails.*.type.in' => 'El tipo de correo electrónico debe ser "personal" o "work".',
             'emails.*.email.required_with' => 'El correo electrónico es obligatorio cuando se proporciona un tipo de correo electrónico.',
             'emails.*.email.string' => 'El correo electrónico debe ser una cadena de texto.',
             'emails.*.email.email' => 'El correo electrónico debe ser válido.',
@@ -121,9 +111,6 @@ class ClientRequest extends FormRequest
             'bank_accounts.*.account_number.required_with' => 'El número de cuenta es obligatorio cuando se proporciona un banco.',
             'bank_accounts.*.account_number.string' => 'El número de cuenta debe ser una cadena de texto.',
             'bank_accounts.*.account_number.max' => 'El número de cuenta no puede tener más de 255 caracteres.',
-            'bank_accounts.*.account_type.required_with' => 'El tipo de cuenta es obligatorio cuando se proporciona un banco.',
-            'bank_accounts.*.account_type.string' => 'El tipo de cuenta debe ser una cadena de texto.',
-            'bank_accounts.*.account_type.max' => 'El tipo de cuenta no puede tener más de 255 caracteres.',
         ];
     }
 }

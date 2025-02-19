@@ -29,9 +29,8 @@ class ClientController extends Controller
      * Store a newly created client in storage.
      *
      * @param ClientRequest $request The request object containing client data.
-     * @return JsonResponse
      */
-    public function store(ClientRequest $request): JsonResponse
+    public function store(ClientRequest $request)
     {
         $client = Client::create($request->all());
 
@@ -50,7 +49,7 @@ class ClientController extends Controller
             $client->bankAccounts()->create($bankAccount);
         }
 
-        return response()->json($client->load(['phones', 'emails', 'bankAccounts']), 200);
+        return response()->noContent();
     }
 
     /**

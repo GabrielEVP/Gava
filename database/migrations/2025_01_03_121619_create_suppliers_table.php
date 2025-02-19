@@ -30,28 +30,27 @@ return new class extends Migration {
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
         });
 
+        Schema::create('supplier_emails', function (Blueprint $table) {
+            $table->id();
+            $table->string('email');
+            $table->unsignedBigInteger('supplier_id');
+            $table->foreign('supplier_id')->references(columns: 'id')->on('suppliers')->onDelete('cascade');
+            $table->timestamps();
+        });
+
         Schema::create('supplier_phones', function (Blueprint $table) {
             $table->id();
-            $table->enum('type', ['landline', 'mobile']);
+            $table->string('name');
             $table->string('phone');
             $table->unsignedBigInteger('supplier_id');
             $table->foreign('supplier_id')->references(columns: 'id')->on('suppliers')->onDelete('cascade');
             $table->timestamps();
         });
 
-        Schema::create('supplier_emails', function (Blueprint $table) {
-            $table->id();
-            $table->enum('type', ['personal', 'work'])->default('work');
-            $table->string('email');
-            $table->unsignedBigInteger('supplier_id');
-            $table->foreign('supplier_id')->references(columns: 'id')->on('suppliers')->onDelete('cascade');
-            $table->timestamps();
-        });
         Schema::create('supplier_bank_accounts', function (Blueprint $table) {
             $table->id();
             $table->string('bank_name');
             $table->string('account_number');
-            $table->string('account_type');
             $table->unsignedBigInteger('supplier_id');
             $table->foreign('supplier_id')->references('id')->on('suppliers')->onDelete('cascade');
             $table->timestamps();

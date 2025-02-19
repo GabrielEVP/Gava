@@ -19,7 +19,6 @@ return new class extends Migration {
             $table->decimal('stock_quantity', 10, 2)->default(0);
             $table->integer('units_per_box')->default(1);
             $table->unsignedBigInteger('company_id')->nullable();
-            $table->unsignedBigInteger('product_category_id')->nullable();
             $table->unsignedBigInteger('supplier_id')->nullable();
             $table->unsignedBigInteger('purchase_id')->nullable();
             $table->timestamps();
@@ -40,18 +39,28 @@ return new class extends Migration {
             $table->foreign('type_price_id')->references('id')->on('type_prices')->onDelete('cascade');
         });
 
-        Schema::create('product_categories', function (Blueprint $table) {
+        Schema::create('categories', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('description')->nullable();
             $table->foreignId('company_id')->constrained()->onDelete('cascade');
             $table->timestamps();
+        });
+
+        Schema::create('category_product', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('product_id');
+            $table->unsignedBigInteger('category_id');
+            $table->timestamps();
+
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('product_categories');
+        Schema::dropIfExists('category_product');
+        Schema::dropIfExists('categories');
         Schema::dropIfExists('product_prices');
         Schema::dropIfExists('products');
     }
