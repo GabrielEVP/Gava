@@ -10,10 +10,9 @@ return new class extends Migration {
     {
         Schema::create('clients', function (Blueprint $table) {
             $table->id();
-            $table->string('code_number');
             $table->string('registration_number');
             $table->string('legal_name');
-            $table->string('type_client');
+            $table->string('type');
             $table->string('website')->nullable();
             $table->string('address')->nullable();
             $table->string('city')->nullable();
@@ -35,6 +34,7 @@ return new class extends Migration {
         Schema::create('client_emails', function (Blueprint $table) {
             $table->id();
             $table->string('email');
+            $table->string('type');
             $table->unsignedBigInteger('client_id');
             $table->foreign('client_id')->references('id')->on('clients')->onDelete('cascade');
             $table->timestamps();
@@ -44,6 +44,7 @@ return new class extends Migration {
             $table->id();
             $table->string('name');
             $table->string('phone');
+            $table->string('type');
             $table->unsignedBigInteger('client_id');
             $table->foreign('client_id')->references(columns: 'id')->on('clients')->onDelete('cascade');
             $table->timestamps();
@@ -53,6 +54,7 @@ return new class extends Migration {
             $table->id();
             $table->string('bank_name');
             $table->string('account_number');
+            $table->string('type');
             $table->unsignedBigInteger('client_id');
             $table->foreign('client_id')->references('id')->on('clients')->onDelete('cascade');
             $table->timestamps();

@@ -10,8 +10,7 @@ return new class extends Migration {
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->string('order_number');
-            $table->string('concept');
+            $table->string('number');
             $table->timestamp('date');
             $table->enum('status', allowed: ['pending', 'accept', 'refused'])->default('pending');
             $table->decimal('total_amount', 10, 2);
@@ -27,9 +26,9 @@ return new class extends Migration {
             $table->string('description');
             $table->integer('quantity');
             $table->decimal('unit_price', 10, 2);
-            $table->decimal('vat_rate', 10, 2);
+            $table->decimal('tax_rate', 10, 2);
             $table->decimal('total_amount', 10, 2)->generatedAs('quantity * unit_price)');
-            $table->decimal('total_amount_rate', 10, 2)->generatedAs('quantity * unit_price * (1 + vat_rate / 100)');
+            $table->decimal('total_amount_rate', 10, 2)->generatedAs('quantity * unit_price * (1 + tax_rate / 100)');
             $table->timestamps();
             $table->unsignedBigInteger('order_id');
             $table->unsignedBigInteger('product_id');

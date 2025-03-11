@@ -3,7 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\TypePayment;
-use App\Models\Company;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class TypePaymentFactory extends Factory
@@ -15,7 +15,7 @@ class TypePaymentFactory extends Factory
         return [
             'name' => $this->faker->unique()->word(),
             'description' => $this->faker->sentence(),
-            'company_id' => Company::factory(),
+            'user_id' => User::factory(),
         ];
     }
 }

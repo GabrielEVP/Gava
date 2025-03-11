@@ -3,7 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\TypePrice;
-use App\Models\Company;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class TypePriceFactory extends Factory
@@ -15,8 +15,9 @@ class TypePriceFactory extends Factory
         return [
             'name' => $this->faker->word(),
             'description' => $this->faker->sentence(),
-            'percentage' => $this->faker->randomFloat(2, 0, 100),
-            'company_id' => Company::factory(),
+            'margin' => '20',
+            'type' => 'fixed',
+            'user_id' => User::factory(),
         ];
     }
 }

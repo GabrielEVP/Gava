@@ -10,10 +10,9 @@ return new class extends Migration {
     {
         Schema::create('suppliers', function (Blueprint $table) {
             $table->id();
-            $table->string('code_number');
             $table->string('registration_number');
             $table->string('legal_name');
-            $table->string('type_supplier');
+            $table->string('type');
             $table->string('website')->nullable();
             $table->string('address')->nullable();
             $table->string('city')->nullable();
@@ -33,6 +32,7 @@ return new class extends Migration {
         Schema::create('supplier_emails', function (Blueprint $table) {
             $table->id();
             $table->string('email');
+            $table->string('type');
             $table->unsignedBigInteger('supplier_id');
             $table->foreign('supplier_id')->references(columns: 'id')->on('suppliers')->onDelete('cascade');
             $table->timestamps();
@@ -42,6 +42,7 @@ return new class extends Migration {
             $table->id();
             $table->string('name');
             $table->string('phone');
+            $table->string('type');
             $table->unsignedBigInteger('supplier_id');
             $table->foreign('supplier_id')->references(columns: 'id')->on('suppliers')->onDelete('cascade');
             $table->timestamps();
@@ -51,6 +52,7 @@ return new class extends Migration {
             $table->id();
             $table->string('bank_name');
             $table->string('account_number');
+            $table->string('type');
             $table->unsignedBigInteger('supplier_id');
             $table->foreign('supplier_id')->references('id')->on('suppliers')->onDelete('cascade');
             $table->timestamps();

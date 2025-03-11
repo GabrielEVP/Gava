@@ -20,14 +20,10 @@ class DatabaseSeeder extends Seeder
             ClientSeeder::class,
             ClientEmailSeeder::class,
             ClientPhoneSeeder::class,
-            CompanySeeder::class,
-            ExpenseTypeSeeder::class,
             InvoiceDueDateSeeder::class,
             InvoiceLineSeeder::class,
             InvoiceSeeder::class,
             InvoicePaymentSeeder::class,
-            RecurringInvoiceSeeder::class,
-            RecurringInvoiceLineSeeder::class,
         ]);
     }
 }

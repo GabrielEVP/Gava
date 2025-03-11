@@ -10,8 +10,7 @@ return new class extends Migration {
     {
         Schema::create('purchases', function (Blueprint $table) {
             $table->id();
-            $table->string('purchase_number');
-            $table->string('concept');
+            $table->string('number');
             $table->date('date');
             $table->enum('status', ['pending', 'paid', 'overdue'])->default('pending');
             $table->decimal('total_amount', 10, 2);
@@ -28,9 +27,9 @@ return new class extends Migration {
             $table->text('description');
             $table->decimal('quantity', 10, 2);
             $table->decimal('unit_price', 10, 2);
-            $table->decimal('vat_rate', 10, 2);
+            $table->decimal('tax_rate', 10, 2);
             $table->decimal('total_amount', 10, 2)->storedAs('quantity * unit_price');
-            $table->decimal('total_amount_rate', 10, 2)->storedAs('quantity * unit_price * (1 + vat_rate / 100)');
+            $table->decimal('total_amount_rate', 10, 2)->storedAs('quantity * unit_price * (1 + tax_rate / 100)');
             $table->timestamps();
             $table->unsignedBigInteger('purchase_id');
             $table->foreign('purchase_id')->references('id')->on('purchases')->onDelete('cascade');

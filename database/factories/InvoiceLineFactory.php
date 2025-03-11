@@ -18,7 +18,8 @@ class InvoiceLineFactory extends Factory
             'quantity' => $this->faker->numberBetween(1, 100),
             'unit_price' => $this->faker->randomFloat(2, 10, 1000),
             'tax_rate' => $this->faker->randomFloat(2, 0, 25),
-            'total' => $this->faker->randomFloat(2, 10, 10000),
+            'total_amount' => $this->faker->randomFloat(2, 10, 10000),
+            'total_amount_rate' => $this->faker->randomFloat(2, 10, 10000),
             'invoice_id' => Invoice::factory(),
             'product_id' => Product::factory(),
         ];

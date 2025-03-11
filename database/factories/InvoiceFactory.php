@@ -4,7 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Invoice;
 use App\Models\Client;
-use App\Models\Company;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class InvoiceFactory extends Factory
@@ -14,11 +14,12 @@ class InvoiceFactory extends Factory
     public function definition(): array
     {
         return [
-            'invoice_number' => $this->faker->unique()->numerify('INV-#####'),
-            'issue_date' => $this->faker->date(),
+            'number' => $this->faker->unique()->numerify('INV-#####'),
+            'date' => $this->faker->date(),
             'status' => $this->faker->randomElement(['pending', 'paid', 'overdue']),
+            'total_amount' => 203,
             'client_id' => Client::factory(),
-            'company_id' => Company::factory(),
+            'user_id' => User::factory(),
         ];
     }
 }

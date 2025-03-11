@@ -13,6 +13,7 @@ class ClientPhoneFactory extends Factory
     public function definition(): array
     {
         return [
+            'name' => $this->faker->companySuffix(),
             'phone' => $this->faker->phoneNumber(),
             'type' => $this->faker->randomElement(['landline', 'mobile']), // Ensure type is set correctly
             'client_id' => Client::factory(),

@@ -16,7 +16,7 @@ class InvoiceDueDateFactory extends Factory
             'invoice_id' => Invoice::factory(),
             'due_date' => $this->faker->date(),
             'amount' => $this->faker->randomFloat(2, 100, 10000),
-            'status' =>  $this->faker->randomElement(['pending', 'paid', 'overdue']),
+            'status' => $this->faker->randomElement(['pending', 'paid', 'overdue']),
         ];
     }
 }
