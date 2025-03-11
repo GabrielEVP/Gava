@@ -30,7 +30,6 @@ class ClientFactory extends Factory
             'payment_terms' => $this->faker->numberBetween(0, 30), // Ensure payment_terms is an integer
             'contact_person' => $this->faker->name(),
             'notes' => $this->faker->sentence(),
-            'company_id' => Company::factory(),
         ];
     }
 }

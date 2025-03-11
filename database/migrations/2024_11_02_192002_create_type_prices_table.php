@@ -16,8 +16,8 @@ return new class extends Migration {
             $table->decimal('margin', 5, 2);
             $table->timestamps();
             $table->softDeletes();
-            $table->unsignedBigInteger('company_id')->nullable();
-            $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

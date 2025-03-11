@@ -51,8 +51,40 @@ class User extends Authenticatable
      *
      * @return HasMany
      */
-    public function companies(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function clients()
     {
-        return $this->hasMany(Company::class);
+        return $this->hasMany(Client::class);
+    }
+
+    public function suppliers()
+    {
+        return $this->hasMany(Supplier::class);
+    }
+
+    public function purchases()
+    {
+        return $this->hasMany(Purchase::class);
+    }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    public function invoices()
+    {
+        return $this->hasMany(Invoice::class);
+    }
+
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+
+
+    }
+
+    public function typePrices()
+    {
+        return $this->hasMany(TypePrice::class);
     }
 }

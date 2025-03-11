@@ -37,7 +37,8 @@ class Order extends Model
         'status',
         'total_amount',
         'client_id',
-        'company_id',
+        'order_id',
+        'user_id'
     ];
 
     /**
@@ -51,13 +52,12 @@ class Order extends Model
     }
 
     /**
-     * Get the company that owns the order.
      *
      * @return BelongsTo
      */
-    public function company(): BelongsTo
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(Company::class);
+        return $this->belongsTo(User::class);
     }
 
     /**

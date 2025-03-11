@@ -46,17 +46,16 @@ class Supplier extends Model
         'credit_day_limit',
         'limit_credit',
         'notes',
-        'company_id',
+        'user_id',
     ];
 
     /**
-     * Get the company that owns the supplier.
      *
      * @return BelongsTo
      */
-    public function company(): BelongsTo
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(Company::class);
+        return $this->belongsTo(User::class);
     }
 
     /**

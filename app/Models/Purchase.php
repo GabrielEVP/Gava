@@ -38,7 +38,7 @@ class Purchase extends Model
         'status',
         'total_amount',
         'supplier_id',
-        'company_id',
+        'user_id',
     ];
 
     /**
@@ -52,13 +52,12 @@ class Purchase extends Model
     }
 
     /**
-     * Get the company that owns the purchase.
      *
      * @return BelongsTo
      */
-    public function company(): BelongsTo
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(Company::class);
+        return $this->belongsTo(User::class);
     }
 
     /**

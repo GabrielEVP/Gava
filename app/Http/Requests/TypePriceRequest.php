@@ -26,7 +26,6 @@ class TypePriceRequest extends FormRequest
             'description' => 'nullable|string|max:255',
             'type' => 'required|string|in:fixed,percentage',
             'margin' => 'required|numeric|min:0|max:100',
-            'company_id' => 'nullable|exists:companies,id',
         ];
     }
 }

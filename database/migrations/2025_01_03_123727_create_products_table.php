@@ -18,12 +18,12 @@ return new class extends Migration {
             $table->decimal('vat_rate', 5, 2)->default(0.00);
             $table->decimal('stock_quantity', 10, 2)->default(0);
             $table->integer('units_per_box')->default(1);
-            $table->unsignedBigInteger('company_id')->nullable();
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('supplier_id')->nullable();
             $table->unsignedBigInteger('purchase_id')->nullable();
             $table->timestamps();
             $table->softDeletes();
-            $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('supplier_id')->references('id')->on('suppliers')->onDelete('cascade');
             $table->foreign('purchase_id')->references('id')->on('purchases')->onDelete('cascade')->nullable();
         });
@@ -42,7 +42,7 @@ return new class extends Migration {
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->foreignId('company_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
 

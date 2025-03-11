@@ -33,17 +33,17 @@ class ProductCategory extends Model
     protected $fillable = [
         'name',
         'description',
-        'company_id',
+        'user_id',
     ];
 
     /**
-     * Get the company that owns the category.
+     * Get the  that owns the category.
      *
      * @return BelongsTo
      */
-    public function company(): BelongsTo
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(Company::class);
+        return $this->belongsTo(User::class);
     }
 
     /**

@@ -30,7 +30,6 @@ class ProductRequest extends FormRequest
             'vat_rate' => 'required|numeric|min:0|max:100',
             'stock_quantity' => 'required|numeric|min:0',
             'units_per_box' => 'required|integer|min:1',
-            'company_id' => 'nullable|exists:companies,id',
             'product_category_id' => 'nullable|exists:product_categories,id',
             'supplier_id' => 'nullable|exists:suppliers,id',
             'purchase_id' => 'nullable|exists:purchases,id',

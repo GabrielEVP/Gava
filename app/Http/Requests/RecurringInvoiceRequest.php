@@ -28,7 +28,6 @@ class RecurringInvoiceRequest extends FormRequest
             'status' => 'required|string|in:active,inactive',
             'next_invoice_date' => 'required|date',
             'client_id' => 'required|exists:clients,id',
-            'company_id' => 'required|exists:companies,id',
             'lines' => 'nullable|array',
             'lines.*.description' => 'required_with:lines|string',
             'lines.*.quantity' => 'required_with:lines|integer|min:0',

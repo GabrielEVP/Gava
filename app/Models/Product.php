@@ -40,19 +40,18 @@ class Product extends Model
         'vat_rate',
         'stock_quantity',
         'units_per_box',
-        'company_id',
+        'user_id',
         'supplier_id',
         'purchase_id',
     ];
 
     /**
-     * Get the company that owns the product.
      *
      * @return BelongsTo
      */
-    public function company(): BelongsTo
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(Company::class);
+        return $this->belongsTo(User::class);
     }
 
 

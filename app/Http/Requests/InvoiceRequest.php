@@ -28,7 +28,7 @@ class InvoiceRequest extends FormRequest
             'status' => 'required|string|in:pending,paid,overdue',
             'total_amount' => 'required|numeric|min:0',
             'client_id' => 'required|exists:clients,id',
-            'company_id' => 'required|exists:companies,id',
+            'user_id' => 'required|exists:users,id',
             'lines' => 'nullable|array',
             'lines.*.description' => 'required_with:lines|string',
             'lines.*.quantity' => 'required_with:lines|integer|min:0',

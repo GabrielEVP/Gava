@@ -38,7 +38,7 @@ class Invoice extends Model
         'status',
         'total_amount',
         'client_id',
-        'company_id',
+        'user_id',
     ];
 
     /**
@@ -52,13 +52,12 @@ class Invoice extends Model
     }
 
     /**
-     * Get the company that owns the invoice.
      *
      * @return BelongsTo
      */
-    public function company(): BelongsTo
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(Company::class);
+        return $this->belongsTo(User::class);
     }
 
     /**

@@ -35,16 +35,15 @@ class TypePrice extends Model
         'description',
         'type',
         'margin',
-        'company_id',
+        'user_id',
     ];
 
     /**
-     * Get the company that owns the type of price.
      *
      * @return BelongsTo
      */
-    public function company(): BelongsTo
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(Company::class);
+        return $this->belongsTo(User::class);
     }
 }

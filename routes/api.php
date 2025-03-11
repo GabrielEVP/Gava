@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ClientController;
-use App\Http\Controllers\Api\CompanyController;
 use App\Http\Controllers\Api\InvoiceController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\ProductController;
@@ -23,7 +22,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('changePassword', [AuthController::class, 'changePassword']);
     Route::post('logout', [AuthController::class, 'logout']);
 
-    Route::resource('companies', CompanyController::class);
     Route::resource('/clients', ClientController::class);
     Route::resource('/products', ProductController::class);
     Route::resource('/typePayments', TypePaymentController::class);

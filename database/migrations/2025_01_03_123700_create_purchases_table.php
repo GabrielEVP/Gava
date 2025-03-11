@@ -18,9 +18,9 @@ return new class extends Migration {
             $table->timestamps();
             $table->softDeletes();
             $table->unsignedBigInteger('supplier_id');
-            $table->unsignedBigInteger('company_id');
+            $table->unsignedBigInteger('user_id');
             $table->foreign('supplier_id')->references('id')->on('suppliers')->onDelete('cascade');
-            $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
 
         Schema::create('purchase_lines', function (Blueprint $table) {

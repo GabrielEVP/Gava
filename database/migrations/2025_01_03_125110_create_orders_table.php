@@ -17,9 +17,9 @@ return new class extends Migration {
             $table->decimal('total_amount', 10, 2);
             $table->timestamps();
             $table->unsignedBigInteger('client_id');
-            $table->unsignedBigInteger('company_id');
+            $table->unsignedBigInteger('user_id');
             $table->foreign('client_id')->references('id')->on('clients')->onDelete('cascade');
-            $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
 
         Schema::create('order_lines', function (Blueprint $table) {
