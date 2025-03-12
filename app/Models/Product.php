@@ -24,8 +24,6 @@ class Product extends Model
         'stock_quantity',
         'units_per_box',
         'user_id',
-        'supplier_id',
-        'purchase_id',
     ];
 
     public function user(): BelongsTo

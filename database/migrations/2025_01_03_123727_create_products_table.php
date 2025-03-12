@@ -20,10 +20,6 @@ return new class extends Migration {
             $table->integer('units_per_box')->default(1);
             $table->timestamps();
             $table->softDeletes();
-            $table->unsignedBigInteger('purchase_id')->nullable();
-            $table->foreign('purchase_id')->references('id')->on('purchases')->onDelete('cascade')->nullable();
-            $table->unsignedBigInteger('supplier_id')->nullable();
-            $table->foreign('supplier_id')->references('id')->on('suppliers')->onDelete('cascade')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
