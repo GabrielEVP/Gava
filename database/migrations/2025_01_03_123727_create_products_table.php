@@ -46,7 +46,7 @@ return new class extends Migration {
             $table->timestamps();
         });
 
-        Schema::create('category_product', function (Blueprint $table) {
+        Schema::create('products_categories', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('product_id');
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
@@ -54,11 +54,31 @@ return new class extends Migration {
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
             $table->timestamps();
         });
+
+        Schema::create('products_suppliers', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('product_id');
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
+            $table->unsignedBigInteger('supplier_id');
+            $table->foreign('supplier_id')->references('id')->on('suppliers')->onDelete('cascade');
+            $table->timestamps();
+        });
+
+        Schema::create('products_purchases', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('product_id');
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
+            $table->unsignedBigInteger('purchase_id');
+            $table->foreign('purchase_id')->references('id')->on('purchases')->onDelete('cascade');
+            $table->timestamps();
+        });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('category_product');
+        Schema::dropIfExists(table: 'products_purchases');
+        Schema::dropIfExists(table: 'products_suppliers');
+        Schema::dropIfExists(table: 'products_categories');
         Schema::dropIfExists('categories');
         Schema::dropIfExists('product_prices');
         Schema::dropIfExists('products');

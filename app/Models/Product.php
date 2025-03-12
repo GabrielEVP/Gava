@@ -32,25 +32,24 @@ class Product extends Model
     {
         return $this->belongsTo(User::class);
     }
-
-    public function supplier(): BelongsTo
-    {
-        return $this->belongsTo(Supplier::class);
-    }
-
-    public function purchase(): BelongsTo
-    {
-        return $this->belongsTo(Purchase::class);
-    }
-
     public function prices(): HasMany
     {
         return $this->hasMany(ProductPrice::class);
     }
 
-    public function category(): belongsToMany
+    public function categories(): belongsToMany
     {
-        return $this->belongsToMany(Category::class, 'category_product');
+        return $this->belongsToMany(Category::class, 'products_categories');
+    }
+
+    public function suppliers(): belongsToMany
+    {
+        return $this->belongsToMany(Supplier::class, 'products_suppliers');
+    }
+
+    public function purchases(): belongsToMany
+    {
+        return $this->belongsToMany(Purchase::class, 'products_purchases');
     }
 }
 

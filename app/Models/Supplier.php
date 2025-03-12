@@ -5,6 +5,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Supplier extends Model
@@ -47,5 +48,10 @@ class Supplier extends Model
     public function bankAccounts(): HasMany
     {
         return $this->hasMany(SupplierBankAccount::class);
+    }
+
+    public function products(): belongsToMany
+    {
+        return $this->belongsToMany(Product::class, 'products_suppliers');
     }
 }
