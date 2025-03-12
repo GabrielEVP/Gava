@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
@@ -7,30 +6,14 @@ use App\Http\Requests\InvoiceRequest;
 use App\Models\Invoice;
 use Illuminate\Http\JsonResponse;
 
-/**
- * Class InvoiceController
- *
- * Controller for handling invoice-related operations.
- */
 class InvoiceController extends Controller
 {
-    /**
-     * Display a listing of the invoices.
-     *
-     * @return JsonResponse
-     */
     public function index(): JsonResponse
     {
         $invoices = Invoice::with(['lines', 'payments', 'dueDates'])->get();
         return response()->json($invoices, 200);
     }
 
-    /**
-     * Store a newly created invoice in storage.
-     *
-     * @param InvoiceRequest $request The request object containing invoice data.
-     * @return JsonResponse
-     */
     public function store(InvoiceRequest $request): JsonResponse
     {
         $invoice = Invoice::create($request->all());
@@ -53,25 +36,12 @@ class InvoiceController extends Controller
         return response()->json($invoice->load(['lines', 'payments', 'dueDates']), 201);
     }
 
-    /**
-     * Display the specified invoice.
-     *
-     * @param string $id The ID of the invoice.
-     * @return JsonResponse
-     */
     public function show(string $id): JsonResponse
     {
         $invoice = Invoice::with(['lines', 'payments', 'dueDates'])->findOrFail($id);
         return response()->json($invoice, 200);
     }
 
-    /**
-     * Update the specified invoice in storage.
-     *
-     * @param InvoiceRequest $request The request object containing updated invoice data.
-     * @param string $id The ID of the invoice.
-     * @return JsonResponse
-     */
     public function update(InvoiceRequest $request, string $id): JsonResponse
     {
         $invoice = Invoice::findOrFail($id);
@@ -95,12 +65,6 @@ class InvoiceController extends Controller
         return response()->json($invoice->load(['lines', 'payments', 'dueDates']), 200);
     }
 
-    /**
-     * Remove the specified invoice from storage.
-     *
-     * @param string $id The ID of the invoice.
-     * @return JsonResponse
-     */
     public function destroy(string $id): JsonResponse
     {
         $invoice = Invoice::findOrFail($id);

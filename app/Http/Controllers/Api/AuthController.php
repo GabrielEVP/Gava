@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
@@ -11,19 +10,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
 
-/**
- * Class AuthController
- *
- * Controller for handling authentication-related actions using Laravel Sanctum.
- */
 class AuthController extends Controller
 {
-    /**
-     * Register a new user and return an authentication token.
-     *
-     * @param AuthRequest $request The request containing user registration data.
-     * @return JsonResponse The response containing the authentication token.
-     */
     public function register(AuthRequest $request): JsonResponse
     {
         $user = User::create([
@@ -40,12 +28,6 @@ class AuthController extends Controller
         ], 201);
     }
 
-    /**
-     * Log in a user and return an authentication token.
-     *
-     * @param AuthRequest $request The request containing login credentials.
-     * @return JsonResponse The response containing the authentication token.
-     */
     public function login(AuthRequest $request): JsonResponse
     {
         if (!Auth::attempt($request->only('email', 'password'))) {
@@ -64,13 +46,6 @@ class AuthController extends Controller
         ]);
     }
 
-    /**
-     * Change the authenticated user's password.
-     *
-     * @param AuthRequest $request The request containing the current and new passwords.
-     * @return JsonResponse The response indicating the success of the password change.
-     * @throws ValidationException If the current password is incorrect.
-     */
     public function changePassword(AuthRequest $request): JsonResponse
     {
         $user = auth()->user();
@@ -87,11 +62,6 @@ class AuthController extends Controller
         return response()->json(['message' => 'Contraseña actualizada exitosamente.'], 200);
     }
 
-    /**
-     * Log out the authenticated user by deleting their tokens.
-     *
-     * @return JsonResponse The response indicating the success of the logout.
-     */
     public function logout(): JsonResponse
     {
         auth()->user()->tokens()->delete();

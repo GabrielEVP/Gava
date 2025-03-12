@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
@@ -30,17 +29,4 @@ class AuthRequest extends FormRequest
 
         return [];
     }
-
-    public function messages(): array
-    {
-        return [
-            'name.required' => 'El campo nombre es obligatorio.',
-            'email.required' => 'El campo correo electrónico es obligatorio.',
-            'email.email' => 'El campo correo electrónico debe ser un correo válido.',
-            'email.unique' => 'El correo electrónico ya está en uso.',
-            'password.required' => 'El campo contraseña es obligatorio.',
-            'password.min' => 'El campo contraseña debe tener al menos :min caracteres.',
-        ];
-    }
-
 }
