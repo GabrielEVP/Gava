@@ -19,7 +19,7 @@ class SupplierController extends Controller
         $supplier = Supplier::create($request->all());
 
         $addresses = $request->input('addresses', []);
-        foreach ($addresses as address) {
+        foreach ($addresses as $address) {
             $supplier->addresses()->create($address);
         }
 
