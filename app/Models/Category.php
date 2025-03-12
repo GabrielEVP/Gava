@@ -4,19 +4,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-class TypePrice extends Model
+class Category extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
 
-    protected $table = 'type_prices';
+    protected $table = 'categories';
 
     protected $fillable = [
         'name',
-        'description',
-        'type',
-        'margin',
         'user_id',
     ];
 
@@ -24,4 +21,10 @@ class TypePrice extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function products(): belongsToMany
+    {
+        return $this->belongsToMany(Product::class, 'category_product');
+    }
+
 }

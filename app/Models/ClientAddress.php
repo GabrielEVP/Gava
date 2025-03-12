@@ -5,18 +5,19 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class ClientBankAccount extends Model
+class ClientAddress extends Model
 {
     use HasFactory;
 
-    protected $table = 'client_bank_accounts';
+    protected $table = 'client_adresses';
 
     protected $fillable = [
-        'name',
-        'account_number',
-        'account_type',
-        'type',
-        'client_id',
+        'address',
+        'state',
+        'municipality',
+        'postal_code',
+        'country',
+        'is_billing',
     ];
 
     public function client(): BelongsTo
