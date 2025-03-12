@@ -32,10 +32,9 @@ class Client extends Model
      * @var array
      */
     protected $fillable = [
-        'code_number',
         'registration_number',
         'legal_name',
-        'type_client',
+        'type',
         'website',
         'address',
         'city',

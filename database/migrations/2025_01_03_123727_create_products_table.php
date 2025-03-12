@@ -15,17 +15,17 @@ return new class extends Migration {
             $table->string('barcode')->nullable();
             $table->string('reference_code')->nullable();
             $table->decimal('purchase_price', 10, 2);
-            $table->decimal('vat_rate', 5, 2)->default(0.00);
+            $table->decimal('tax_rate', 5, 2)->default(0.00);
             $table->decimal('stock_quantity', 10, 2)->default(0);
             $table->integer('units_per_box')->default(1);
-            $table->unsignedBigInteger('user_id')->nullable();
-            $table->unsignedBigInteger('supplier_id')->nullable();
-            $table->unsignedBigInteger('purchase_id')->nullable();
             $table->timestamps();
             $table->softDeletes();
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('supplier_id')->references('id')->on('suppliers')->onDelete('cascade');
+            $table->unsignedBigInteger('purchase_id')->nullable();
             $table->foreign('purchase_id')->references('id')->on('purchases')->onDelete('cascade')->nullable();
+            $table->unsignedBigInteger('supplier_id')->nullable();
+            $table->foreign('supplier_id')->references('id')->on('suppliers')->onDelete('cascade')->nullable();
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
 
         Schema::create('product_prices', function (Blueprint $table) {
@@ -34,8 +34,8 @@ return new class extends Migration {
             $table->timestamps();
             $table->softDeletes();
             $table->unsignedBigInteger('product_id');
-            $table->unsignedBigInteger('type_price_id');
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
+            $table->unsignedBigInteger('type_price_id');
             $table->foreign('type_price_id')->references('id')->on('type_prices')->onDelete('cascade');
         });
 
@@ -49,11 +49,10 @@ return new class extends Migration {
         Schema::create('category_product', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('product_id');
-            $table->unsignedBigInteger('category_id');
-            $table->timestamps();
-
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
+            $table->unsignedBigInteger('category_id');
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
+            $table->timestamps();
         });
     }
 

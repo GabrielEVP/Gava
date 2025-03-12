@@ -23,10 +23,9 @@ class ClientRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'code_number' => 'required|string|max:255',
             'registration_number' => 'required|string|max:255',
             'legal_name' => 'required|string|max:255',
-            'type_client' => 'required|string|max:255',
+            'type' => 'required|string|max:255',
             'website' => 'nullable|string|max:255',
             'address' => 'nullable|string|max:255',
             'city' => 'nullable|string|max:100',
@@ -57,18 +56,15 @@ class ClientRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'code_number.required' => 'El número de código es obligatorio.',
-            'code_number.string' => 'El número de código debe ser una cadena de texto.',
-            'code_number.max' => 'El número de código no puede tener más de 255 caracteres.',
             'registration_number.required' => 'El número de registro es obligatorio.',
             'registration_number.string' => 'El número de registro debe ser una cadena de texto.',
             'registration_number.max' => 'El número de registro no puede tener más de 255 caracteres.',
             'legal_name.required' => 'El nombre legal es obligatorio.',
             'legal_name.string' => 'El nombre legal debe ser una cadena de texto.',
             'legal_name.max' => 'El nombre legal no puede tener más de 255 caracteres.',
-            'type_client.required' => 'El tipo de cliente es obligatorio.',
-            'type_client.string' => 'El tipo de cliente debe ser una cadena de texto.',
-            'type_client.max' => 'El tipo de cliente no puede tener más de 255 caracteres.',
+            'type.required' => 'El tipo de cliente es obligatorio.',
+            'type.string' => 'El tipo de cliente debe ser una cadena de texto.',
+            'type.max' => 'El tipo de cliente no puede tener más de 255 caracteres.',
             'website.string' => 'El sitio web debe ser una cadena de texto.',
             'website.max' => 'El sitio web no puede tener más de 255 caracteres.',
             'address.string' => 'La dirección debe ser una cadena de texto.',

@@ -10,49 +10,53 @@ return new class extends Migration {
     {
         Schema::create('purchases', function (Blueprint $table) {
             $table->id();
-            $table->string('number');
-            $table->date('date');
-            $table->enum('status', ['pending', 'paid', 'overdue'])->default('pending');
+            $table->string(column: 'number');
+            $table->date(column: 'date');
+            $table->enum(column: 'status', allowed: ['pending', 'paid', 'refused'])->default('pending');
             $table->decimal('total_amount', 10, 2);
+            $table->decimal('total_tax_amount', 10, 2);
             $table->timestamps();
             $table->softDeletes();
             $table->unsignedBigInteger('supplier_id');
-            $table->unsignedBigInteger('user_id');
             $table->foreign('supplier_id')->references('id')->on('suppliers')->onDelete('cascade');
+            $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
 
         Schema::create('purchase_lines', function (Blueprint $table) {
             $table->id();
-            $table->text('description');
-            $table->decimal('quantity', 10, 2);
+            $table->string('description');
+            $table->integer('quantity');
             $table->decimal('unit_price', 10, 2);
             $table->decimal('tax_rate', 10, 2);
-            $table->decimal('total_amount', 10, 2)->storedAs('quantity * unit_price');
-            $table->decimal('total_amount_rate', 10, 2)->storedAs('quantity * unit_price * (1 + tax_rate / 100)');
-            $table->timestamps();
+            $table->decimal('total_amount', 10, 2)->generatedAs('quantity * unit_price)');
+            $table->decimal('total_tax_amount', 10, 2)->generatedAs('quantity * unit_price * (1 + tax_rate / 100)');
             $table->unsignedBigInteger('purchase_id');
-            $table->foreign('purchase_id')->references('id')->on('purchases')->onDelete('cascade');
+            $table->foreign('purchase_id')->references('id')->on(table: 'purchases')->onDelete('cascade');
+            $table->unsignedBigInteger('product_id')->nullable();
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('set null');
+            $table->timestamps();
         });
 
         Schema::create('purchase_payments', function (Blueprint $table) {
             $table->id();
-            $table->date('payment_date');
+            $table->date('date');
             $table->decimal('amount', 10, 2);
-            $table->timestamps();
             $table->unsignedBigInteger('purchase_id');
+            $table->foreign('purchase_id')->references('id')->on(table: 'purchases')->onDelete('cascade');
             $table->unsignedBigInteger('type_payment_id');
-            $table->foreign('purchase_id')->references('id')->on('purchases')->onDelete('cascade');
             $table->foreign('type_payment_id')->references('id')->on('type_payments')->onDelete('restrict');
+            $table->timestamps();
         });
 
         Schema::create('purchase_due_dates', function (Blueprint $table) {
             $table->id();
-            $table->timestamp('due_date');
+            $table->date('date');
             $table->decimal('amount', 10, 2);
-            $table->timestamps();
+            $table->enum('status', ['pending', 'paid', 'refused'])->default('pending');
             $table->unsignedBigInteger('purchase_id');
-            $table->foreign('purchase_id')->references('id')->on('purchases')->onDelete('cascade');
+            $table->foreign('purchase_id')->references('id')->on(table: 'purchases')->onDelete('cascade');
+            $table->timestamps();
         });
     }
 
