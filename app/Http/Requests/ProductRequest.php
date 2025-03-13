@@ -23,7 +23,7 @@ class ProductRequest extends FormRequest
             'stock_quantity' => 'required|numeric|min:0',
             'units_per_box' => 'required|integer|min:1',
             'user_id' => 'nullable|exists:users,id',
-            'product_prices' => 'nullable|array',
+            'product_prices' => 'array',
             'product_prices.*.price' => 'required_with:product_prices|numeric|min:0',
             'product_prices.*.type_price_id' => 'required_with:product_prices|exists:type_prices,id',
             'categories' => 'nullable|array',

@@ -24,7 +24,7 @@ class OrderRequest extends FormRequest
             'order_lines' => 'nullable|array',
             'order_lines.*.description' => 'required_with:order_lines|string|max:255',
             'order_lines.*.quantity' => 'required_with:order_lines|integer|min:1',
-            'order_lines.*.unit_price' => 'required_with:order_lines|numeric|min:0',
+            'order_lines.*.unit_price' => 'numeric|min:0',
             'order_lines.*.tax_rate' => 'required_with:order_lines|numeric|min:0|max:100',
             'order_lines.*.total_amount' => 'required_with:order_lines|numeric|min:0',
             'order_lines.*.total_tax_amount' => 'required_with:order_lines|numeric|min:0',
