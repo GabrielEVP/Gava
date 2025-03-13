@@ -14,20 +14,22 @@ class OrderRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'order_number' => 'required|string|max:255',
-            'concept' => 'required|string|max:255',
+            'number' => 'required|string|max:255',
             'date' => 'required|date',
-            'status' => 'required|string|in:pending,accept,refused',
+            'status' => 'required|string|in:pending,paid,refused',
             'total_amount' => 'required|numeric|min:0',
+            'total_tax_amount' => 'required|numeric|min:0',
             'client_id' => 'required|exists:clients,id',
-            'lines' => 'nullable|array',
-            'lines.*.description' => 'required_with:lines|string',
-            'lines.*.quantity' => 'required_with:lines|integer|min:0',
-            'lines.*.unit_price' => 'required_with:lines|numeric|min:0',
-            'lines.*.vat_rate' => 'required_with:lines|numeric|min:0|max:100',
-            'lines.*.total_amount' => 'nullable|numeric|min:0',
-            'lines.*.total_amount_rate' => 'nullable|numeric|min:0',
-            'lines.*.product_id' => 'nullable|exists:products,id',
+            'user_id' => 'required|exists:users,id',
+            'order_lines' => 'nullable|array',
+            'order_lines.*.description' => 'required_with:order_lines|string|max:255',
+            'order_lines.*.quantity' => 'required_with:order_lines|integer|min:1',
+            'order_lines.*.unit_price' => 'required_with:order_lines|numeric|min:0',
+            'order_lines.*.tax_rate' => 'required_with:order_lines|numeric|min:0|max:100',
+            'order_lines.*.total_amount' => 'required_with:order_lines|numeric|min:0',
+            'order_lines.*.total_tax_amount' => 'required_with:order_lines|numeric|min:0',
+            'order_lines.*.order_id' => 'required_with:order_lines|exists:orders,id',
+            'order_lines.*.product_id' => 'nullable|exists:products,id',
         ];
     }
 }
