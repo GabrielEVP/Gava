@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
-use App\Models\Purchase;
 use App\Models\PurchaseDueDate;
+use App\Models\Purchase;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class PurchaseDueDateFactory extends Factory
@@ -13,9 +13,10 @@ class PurchaseDueDateFactory extends Factory
     public function definition(): array
     {
         return [
-            'purchase_id' => Purchase::factory(),
-            'due_date' => $this->faker->date(),
+            'date' => $this->faker->date(),
             'amount' => $this->faker->randomFloat(2, 100, 10000),
+            'status' => $this->faker->randomElement(['pending', 'paid', 'refused']),
+            'purchase_id' => Purchase::factory(),
         ];
     }
 }

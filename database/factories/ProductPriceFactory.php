@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Product;
 use App\Models\ProductPrice;
+use App\Models\TypePrice;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ProductPriceFactory extends Factory
@@ -13,10 +14,9 @@ class ProductPriceFactory extends Factory
     public function definition(): array
     {
         return [
+            'price' => $this->faker->randomFloat(2, 1, 500),
             'product_id' => Product::factory(),
-            'price' => $this->faker->randomFloat(2, 1, 100),
-            'valid_from' => $this->faker->date(),
-            'valid_to' => $this->faker->date(),
+            'type_price_id' => TypePrice::factory(),
         ];
     }
 }

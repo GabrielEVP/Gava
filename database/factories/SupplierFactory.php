@@ -13,10 +13,15 @@ class SupplierFactory extends Factory
     public function definition(): array
     {
         return [
-            'legal_name' => $this->faker->companySuffix() . ' ' . $this->faker->company(),
-            'registration_number' => $this->faker->unique()->numerify('REG#######'),
-            'type' => 'OT',
+            'registration_number' => $this->faker->regexify('[A-Z]{3}-[0-9]{5}'),
+            'legal_name' => $this->faker->companySuffix(),
+            'type' => $this->faker->randomElement(['NT', 'JU', 'GB', 'OT']),
             'website' => $this->faker->url(),
+            'country' => $this->faker->country(),
+            'currency' => $this->faker->randomElement(['USD', 'EUR', 'BOV', 'OT']),
+            'tax_rate' => $this->faker->randomFloat(2, 0, 20),
+            'discount' => $this->faker->randomFloat(2, 0, 20),
+            'notes' => $this->faker->sentence(),
             'user_id' => User::factory(),
         ];
     }

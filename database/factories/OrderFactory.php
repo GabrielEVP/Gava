@@ -2,14 +2,14 @@
 
 namespace Database\Factories;
 
-use App\Models\Purchase;
-use App\Models\Supplier;
+use App\Models\Order;
+use App\Models\Client;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class PurchaseFactory extends Factory
+class OrderFactory extends Factory
 {
-    protected $model = Purchase::class;
+    protected $model = Order::class;
 
     public function definition(): array
     {
@@ -19,7 +19,7 @@ class PurchaseFactory extends Factory
             'status' => $this->faker->randomElement(['pending', 'paid', 'refused']),
             'total_amount' => $this->faker->randomFloat(2, 0, 20),
             'total_tax_amount' => $this->faker->randomFloat(2, 0, 20),
-            'supplier_id' => Supplier::factory(),
+            'client_id' => Client::factory(),
             'user_id' => User::factory(),
         ];
     }

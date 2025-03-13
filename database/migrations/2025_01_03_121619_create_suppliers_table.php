@@ -33,18 +33,17 @@ return new class extends Migration {
             $table->string('postal_code');
             $table->string('country');
             $table->boolean('is_billing')->default(false);
-            $table->unsignedBigInteger('client_id');
-            $table->foreign('client_id')->references('id')->on('clients')->onDelete('cascade');
+            $table->unsignedBigInteger('supplier_id');
+            $table->foreign('supplier_id')->references('id')->on('suppliers')->onDelete('cascade');
             $table->timestamps();
-
         });
 
         Schema::create('supplier_emails', function (Blueprint $table) {
             $table->id();
             $table->string('email');
             $table->enum(column: 'type', allowed: ['Work', 'Personal'])->default('Work');
-            $table->unsignedBigInteger('client_id');
-            $table->foreign('client_id')->references('id')->on('clients')->onDelete('cascade');
+            $table->unsignedBigInteger('supplier_id');
+            $table->foreign('supplier_id')->references('id')->on('suppliers')->onDelete('cascade');
             $table->timestamps();
         });
 
@@ -53,8 +52,8 @@ return new class extends Migration {
             $table->string('name');
             $table->string('phone');
             $table->enum(column: 'type', allowed: ['Work', 'Personal'])->default('Work');
-            $table->unsignedBigInteger('client_id');
-            $table->foreign('client_id')->references(columns: 'id')->on('clients')->onDelete('cascade');
+            $table->unsignedBigInteger('supplier_id');
+            $table->foreign('supplier_id')->references(columns: 'id')->on('suppliers')->onDelete('cascade');
             $table->timestamps();
         });
 
@@ -63,8 +62,8 @@ return new class extends Migration {
             $table->string('name');
             $table->string('account_number');
             $table->enum(column: 'type', allowed: ['AH', 'CO', 'OT'])->default('OT');
-            $table->unsignedBigInteger('client_id');
-            $table->foreign('client_id')->references('id')->on('clients')->onDelete('cascade');
+            $table->unsignedBigInteger('supplier_id');
+            $table->foreign('supplier_id')->references('id')->on('suppliers')->onDelete('cascade');
             $table->timestamps();
         });
     }

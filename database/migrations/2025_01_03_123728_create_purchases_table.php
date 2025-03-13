@@ -58,6 +58,15 @@ return new class extends Migration {
             $table->foreign('purchase_id')->references('id')->on(table: 'purchases')->onDelete('cascade');
             $table->timestamps();
         });
+
+        Schema::create('products_purchases', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('product_id');
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
+            $table->unsignedBigInteger('purchase_id');
+            $table->foreign('purchase_id')->references('id')->on('purchases')->onDelete('cascade');
+            $table->timestamps();
+        });
     }
 
     public function down(): void

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -53,5 +54,4 @@ class Purchase extends Model
     {
         return $this->belongsToMany(Product::class, 'products_purchases');
     }
-
 }

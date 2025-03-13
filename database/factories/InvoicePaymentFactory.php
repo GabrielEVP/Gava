@@ -14,7 +14,7 @@ class InvoicePaymentFactory extends Factory
     public function definition(): array
     {
         return [
-            'payment_date' => $this->faker->date(),
+            'date' => $this->faker->date(),
             'amount' => $this->faker->randomFloat(2, 50, 5000),
             'invoice_id' => Invoice::factory(),
             'type_payment_id' => TypePayment::factory(),

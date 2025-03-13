@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -9,7 +10,7 @@ class ClientAddress extends Model
 {
     use HasFactory;
 
-    protected $table = 'client_adresses';
+    protected $table = 'client_addresses';
 
     protected $fillable = [
         'address',

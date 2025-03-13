@@ -2,20 +2,20 @@
 
 namespace Database\Factories;
 
-use App\Models\ClientEmail;
-use App\Models\Client;
+use App\Models\SupplierEmail;
+use App\Models\Supplier;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class ClientEmailFactory extends Factory
+class SupplierEmailFactory extends Factory
 {
-    protected $model = ClientEmail::class;
+    protected $model = SupplierEmail::class;
 
     public function definition(): array
     {
         return [
             'email' => $this->faker->email(),
             'type' => $this->faker->randomElement(['Work', 'Personal']),
-            'client_id' => Client::factory(),
+            'supplier_id' => Supplier::factory(),
         ];
     }
 }

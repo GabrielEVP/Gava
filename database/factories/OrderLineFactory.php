@@ -2,14 +2,14 @@
 
 namespace Database\Factories;
 
-use App\Models\PurchaseLine;
-use App\Models\Purchase;
+use App\Models\OrderLine;
+use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class PurchaseLineFactory extends Factory
+class OrderLineFactory extends Factory
 {
-    protected $model = PurchaseLine::class;
+    protected $model = OrderLine::class;
 
     public function definition(): array
     {
@@ -20,7 +20,7 @@ class PurchaseLineFactory extends Factory
             'tax_rate' => $this->faker->randomFloat(2, 0, 25),
             'total_amount' => $this->faker->randomFloat(2, 10, 10000),
             'total_tax_amount' => $this->faker->randomFloat(2, 10, 10000),
-            'purchase_id' => Purchase::factory(),
+            'order_id' => Order::factory(),
             'product_id' => Product::factory(),
         ];
     }

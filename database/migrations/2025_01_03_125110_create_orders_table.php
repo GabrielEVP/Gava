@@ -9,6 +9,7 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('orders', function (Blueprint $table) {
+            $table->id();
             $table->string(column: 'number');
             $table->date(column: 'date');
             $table->enum(column: 'status', allowed: ['pending', 'paid', 'refused'])->default('pending');

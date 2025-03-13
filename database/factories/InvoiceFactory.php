@@ -16,8 +16,9 @@ class InvoiceFactory extends Factory
         return [
             'number' => $this->faker->unique()->numerify('INV-#####'),
             'date' => $this->faker->date(),
-            'status' => $this->faker->randomElement(['pending', 'paid', 'overdue']),
-            'total_amount' => 203,
+            'status' => $this->faker->randomElement(['pending', 'paid', 'refused']),
+            'total_amount' => $this->faker->randomFloat(2, 0, 20),
+            'total_tax_amount' => $this->faker->randomFloat(2, 0, 20),
             'client_id' => Client::factory(),
             'user_id' => User::factory(),
         ];

@@ -2,13 +2,13 @@
 
 namespace Database\Factories;
 
-use App\Models\ClientPhone;
-use App\Models\Client;
+use App\Models\SupplierPhone;
+use App\Models\Supplier;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class ClientPhoneFactory extends Factory
+class SupplierPhoneFactory extends Factory
 {
-    protected $model = ClientPhone::class;
+    protected $model = SupplierPhone::class;
 
     public function definition(): array
     {
@@ -16,7 +16,7 @@ class ClientPhoneFactory extends Factory
             'name' => $this->faker->companySuffix(),
             'phone' => $this->faker->phoneNumber(),
             'type' => $this->faker->randomElement(['Work', 'Personal']),
-            'client_id' => Client::factory(),
+            'supplier_id' => Supplier::factory(),
         ];
     }
 }
