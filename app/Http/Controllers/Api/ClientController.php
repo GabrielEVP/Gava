@@ -38,7 +38,7 @@ class ClientController extends Controller
             $client->bankAccounts()->create($bankAccount);
         }
 
-        return response()->noContent();
+        return response()->json($client->load(['addresses', 'phones', 'emails', 'bankAccounts']), 200);
     }
 
     public function show(string $id): JsonResponse
@@ -46,11 +46,17 @@ class ClientController extends Controller
         $client = Client::with(['phones', 'emails', 'bankAccounts'])->findOrFail($id);
         return response()->json($client, 200);
     }
+
     public function update(ClientRequest $request, string $id)
     {
 
         $client = Client::findOrFail($id);
         $client->update($request->all());
+
+        $client->address()->delete();
+        foreach ($request->input('addresses', []) as $address) {
+            $client->addresses()->create($address);
+        }
 
         $client->phones()->delete();
         foreach ($request->input('phones', []) as $phone) {
@@ -67,21 +73,16 @@ class ClientController extends Controller
             $client->bankAccounts()->create($bankAccount);
         }
 
-        $client->address()->delete();
-        foreach ($request->input('addresses', []) as $address) {
-            $client->addresses()->create($address);
-        }
-
-        return response()->json($client->load(['phones', 'emails', 'bankAccounts']), 200);
+        return response()->json($client->load(['addresses', 'phones', 'emails', 'bankAccounts']), 200);
     }
 
     public function destroy(string $id): JsonResponse
     {
         $client = Client::findOrFail($id);
+        $client->addresses()->delete();
         $client->phones()->delete();
         $client->emails()->delete();
         $client->bankAccounts()->delete();
-        $client->addresses()->delete();
         $client->delete();
 
         return response()->json(["message" => "Client With Id: {$id} Has Been Deleted"], 200);

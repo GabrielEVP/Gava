@@ -78,7 +78,7 @@ class SupplierController extends Controller
     public function destroy(string $id): JsonResponse
     {
         $supplier = Supplier::findOrFail($id);
-        $supplier->addresses->delete();
+        $supplier->addresses()->delete();
         $supplier->phones()->delete();
         $supplier->emails()->delete();
         $supplier->bankAccounts()->delete();
