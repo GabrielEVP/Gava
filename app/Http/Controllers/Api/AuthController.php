@@ -26,14 +26,14 @@ class AuthController extends Controller
         return response()->json([
             'access_token' => $token,
             'token_type' => 'Bearer',
-        ], 201);
+        ], 200);
     }
 
     public function login(AuthRequest $request): JsonResponse
     {
         if (!Auth::attempt($request->only('email', 'password'))) {
             return response()->json([
-                'message' => 'El usuario o la contraseña son incorrectos.',
+                'message' => 'Invalid login details',
             ], 401);
         }
 
@@ -44,7 +44,7 @@ class AuthController extends Controller
         return response()->json([
             'access_token' => $token,
             'token_type' => 'Bearer',
-        ]);
+        ], 200);
     }
 
     public function changePassword(AuthRequest $request): JsonResponse

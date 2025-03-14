@@ -28,18 +28,15 @@ class InvoiceRequest extends FormRequest
             'invoice_lines.*.tax_rate' => 'required_with:invoice_lines|numeric|min:0|max:100',
             'invoice_lines.*.total_amount' => 'required_with:invoice_lines|numeric|min:0',
             'invoice_lines.*.total_tax_amount' => 'required_with:invoice_lines|numeric|min:0',
-            'invoice_lines.*.invoice_id' => 'required_with:invoice_lines|exists:invoices,id',
             'invoice_lines.*.product_id' => 'nullable|exists:products,id',
             'invoice_payments' => 'nullable|array',
             'invoice_payments.*.date' => 'required_with:invoice_payments|date',
             'invoice_payments.*.amount' => 'required_with:invoice_payments|numeric|min:0',
-            'invoice_payments.*.invoice_id' => 'required_with:invoice_payments|exists:invoices,id',
             'invoice_payments.*.type_payment_id' => 'required_with:invoice_payments|exists:type_payments,id',
             'invoice_due_dates' => 'nullable|array',
             'invoice_due_dates.*.date' => 'required_with:invoice_due_dates|date',
             'invoice_due_dates.*.amount' => 'required_with:invoice_due_dates|numeric|min:0',
             'invoice_due_dates.*.status' => 'required_with:invoice_due_dates|string|in:pending,paid,refused',
-            'invoice_due_dates.*.invoice_id' => 'required_with:invoice_due_dates|exists:invoices,id',
         ];
     }
 }

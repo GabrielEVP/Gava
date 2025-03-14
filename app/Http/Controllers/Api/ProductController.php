@@ -11,7 +11,7 @@ class ProductController extends Controller
 {
     public function index(): JsonResponse
     {
-        $products = Product::with(['category', 'supplier', 'purchase', 'prices'])->get();
+        $products = Product::with(['prices'])->get();
         return response()->json($products, 200);
     }
 
@@ -24,12 +24,12 @@ class ProductController extends Controller
             $product->prices()->create($price);
         }
 
-        return response()->json($product->load(['category', 'supplier', 'purchase', 'prices']), 201);
+        return response()->json($product->load(['prices']), 200);
     }
 
     public function show(string $id): JsonResponse
     {
-        $product = Product::with(['category', 'supplier', 'purchase', 'prices'])->findOrFail($id);
+        $product = Product::with(['prices'])->findOrFail($id);
         return response()->json($product, 200);
     }
 
@@ -43,7 +43,7 @@ class ProductController extends Controller
             $product->prices()->create($price);
         }
 
-        return response()->json($product->load(['category', 'supplier', 'purchase', 'prices']), 200);
+        return response()->json($product->load(['prices']), 200);
     }
 
     public function destroy(string $id): JsonResponse

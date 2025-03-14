@@ -24,7 +24,7 @@ class OrderController extends Controller
             $order->lines()->create($line);
         }
 
-        return response()->json($order->load(['lines']), 201);
+        return response()->json($order->load(['lines']), 200);
     }
 
     public function show(string $id): JsonResponse

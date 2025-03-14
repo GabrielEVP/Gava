@@ -35,8 +35,6 @@ class PurchaseRequest extends FormRequest
             'purchase_due_dates.*.date' => 'required_with:purchase_due_dates|date',
             'purchase_due_dates.*.amount' => 'required_with:purchase_due_dates|numeric|min:0',
             'purchase_due_dates.*.status' => 'required_with:purchase_due_dates|in:pending,paid,refused',
-            'products_purchases' => 'nullable|array',
-            'products_purchases.*.product_id' => 'required_with:products_purchases|exists:products,id',
         ];
     }
 }

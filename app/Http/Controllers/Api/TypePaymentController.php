@@ -19,7 +19,7 @@ class TypePaymentController extends Controller
     {
         $typePayment = TypePayment::create($request->all());
 
-        return response()->json($typePayment, 201);
+        return response()->json($typePayment, 200);
     }
 
     public function show(string $id): JsonResponse

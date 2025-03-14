@@ -34,7 +34,7 @@ class PurchaseController extends Controller
             $purchase->dueDates()->create($dueDate);
         }
 
-        return response()->json($purchase->load(['lines', 'payments', 'dueDates']), 201);
+        return response()->json($purchase->load(['lines', 'payments', 'dueDates']), status: 200);
     }
 
     public function show(string $id): JsonResponse

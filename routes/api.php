@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\ClientController;
 use App\Http\Controllers\Api\InvoiceController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\PurchaseController;
 use App\Http\Controllers\Api\SupplierController;
 use App\Http\Controllers\Api\TypePaymentController;
 use App\Http\Controllers\Api\TypePriceController;
@@ -24,11 +25,12 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::resource('/clients', ClientController::class);
     Route::resource('/products', ProductController::class);
-    Route::resource('/typePayments', TypePaymentController::class);
-    Route::resource('/typePrices', TypePriceController::class);
+    Route::resource('/type_payments', TypePaymentController::class);
+    Route::resource('/type_prices', TypePriceController::class);
     Route::resource('/suppliers', SupplierController::class);
-    Route::resource('/order', OrderController::class);
+    Route::resource('/orders', OrderController::class);
     Route::resource('/invoices', InvoiceController::class);
+    Route::resource('/purchases', PurchaseController::class);
 
     Route::get('/clients/search/{query}', [ClientController::class, 'search']);
     Route::get('/suppliers/search/{query}', [SupplierController::class, 'search']);

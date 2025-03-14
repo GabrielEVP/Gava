@@ -34,7 +34,7 @@ class InvoiceController extends Controller
             $invoice->dueDates()->create($dueDate);
         }
 
-        return response()->json($invoice->load(['lines', 'payments', 'dueDates']), 201);
+        return response()->json($invoice->load(['lines', 'payments', 'dueDates']), 200);
     }
 
     public function show(string $id): JsonResponse

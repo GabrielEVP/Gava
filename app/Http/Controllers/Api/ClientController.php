@@ -19,9 +19,9 @@ class ClientController extends Controller
     {
         $client = Client::create($request->all());
 
-        $addresses = $request->input('address', []);
+        $addresses = $request->input('addresses', []);
         foreach ($addresses as $address) {
-            $client->address()->create($address);
+            $client->addresses()->create($address);
         }
 
         $phones = $request->input('phones', []);
@@ -54,7 +54,7 @@ class ClientController extends Controller
         $client = Client::findOrFail($id);
         $client->update($request->all());
 
-        $client->address()->delete();
+        $client->addresses()->delete();
         foreach ($request->input('addresses', []) as $address) {
             $client->addresses()->create($address);
         }

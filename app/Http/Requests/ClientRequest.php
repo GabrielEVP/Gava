@@ -28,15 +28,12 @@ class ClientRequest extends FormRequest
             'phones.*.name' => 'required_with:phones|string|max:20',
             'phones.*.phone' => 'required_with:phones|string|max:20',
             'phones.*.type' => 'nullable|string|in:Work,Personal',
-            'phones.*.client_id' => 'required_with:phones|exists:clients,id',
             'emails' => 'array',
             'emails.*.email' => 'required_with:emails|string|email|max:255',
             'emails.*.type' => 'nullable|string|in:Work,Personal',
-            'emails.*.client_id' => 'required_with:emails|exists:clients,id',
             'bank_accounts' => 'nullable|array',
             'bank_accounts.*.account_number' => 'required_with:bank_accounts|string|max:255',
             'bank_accounts.*.type' => 'nullable|string|in:AH,CO,OT',
-            'bank_accounts.*.client_id' => 'required_with:bank_accounts|exists:clients,id',
             'addresses' => 'nullable|array',
             'addresses.*.address' => 'required_with:addresses|string|max:255',
             'addresses.*.state' => 'string|max:100',
@@ -44,7 +41,6 @@ class ClientRequest extends FormRequest
             'addresses.*.postal_code' => 'required_with:addresses|string|max:20',
             'addresses.*.country' => 'required_with:addresses|string|max:100',
             'addresses.*.is_billing' => 'nullable|boolean',
-            'addresses.*.client_id' => 'required_with:addresses|exists:clients,id',
         ];
     }
 }

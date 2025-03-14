@@ -28,7 +28,6 @@ class OrderRequest extends FormRequest
             'order_lines.*.tax_rate' => 'required_with:order_lines|numeric|min:0|max:100',
             'order_lines.*.total_amount' => 'required_with:order_lines|numeric|min:0',
             'order_lines.*.total_tax_amount' => 'required_with:order_lines|numeric|min:0',
-            'order_lines.*.order_id' => 'required_with:order_lines|exists:orders,id',
             'order_lines.*.product_id' => 'nullable|exists:products,id',
         ];
     }
