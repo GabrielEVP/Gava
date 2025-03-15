@@ -3,6 +3,8 @@
 namespace Tests\Feature;
 
 use App\Models\Product;
+use App\Models\Category;
+use App\Models\Supplier;
 use App\Models\User;
 use App\Models\TypePrice;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -106,5 +108,51 @@ class ProductControllerTest extends TestCase
 
         $response = $this->deleteJson("/api/products/{$product->id}");
         $response->assertStatus(200)->assertJson(['message' => "Product With Id: {$product->id} Has Been Deleted"]);
+    }
+
+    public function testAttachProductToSupplier()
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        $typePrice1 = TypePrice::factory()->create();
+        $typePrice2 = TypePrice::factory()->create();
+
+        $productData = self::$CONSTDATA;
+        $productData['user_id'] = $user->id;
+        $productData['prices'][0]['type_price_id'] = $typePrice1->id;
+        $productData['prices'][1]['type_price_id'] = $typePrice2->id;
+
+        $product = Product::create($productData);
+        $supplier = Supplier::factory()->create();
+        $product->suppliers()->attach($supplier->id);
+
+        $this->assertDatabaseHas('products_suppliers', [
+            'product_id' => $product->id,
+            'supplier_id' => $supplier->id,
+        ]);
+    }
+
+    public function testAttachProductToCategory()
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        $typePrice1 = TypePrice::factory()->create();
+        $typePrice2 = TypePrice::factory()->create();
+
+        $productData = self::$CONSTDATA;
+        $productData['user_id'] = $user->id;
+        $productData['prices'][0]['type_price_id'] = $typePrice1->id;
+        $productData['prices'][1]['type_price_id'] = $typePrice2->id;
+
+        $product = Product::create($productData);
+        $category = Category::factory()->create();
+        $product->categories()->attach($category->id);
+
+        $this->assertDatabaseHas('products_categories', [
+            'product_id' => $product->id,
+            'category_id' => $category->id,
+        ]);
     }
 }

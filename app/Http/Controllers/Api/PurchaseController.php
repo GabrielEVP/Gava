@@ -76,4 +76,21 @@ class PurchaseController extends Controller
 
         return response()->json(["message" => "Purchase With Id: {$id} Has Been Deleted"], 200);
     }
+
+    public function acceptPurchaseAndAttachProducts(string $id): JsonResponse
+    {
+        $purchase = Purchase::findOrFail($id);
+
+        if ($purchase->status !== 'accepted') {
+            return response()->json(["message" => "Purchase status is not 'accepted'"], 400);
+        }
+
+        $productLines = $purchase->lines;
+
+        foreach ($productLines as $line) {
+            $purchase->products()->attach($line->product_id);
+        }
+
+        return response()->json(["message" => "Products attached to the purchase successfully"], 200);
+    }
 }

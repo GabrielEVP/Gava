@@ -11,7 +11,7 @@ class ProductController extends Controller
 {
     public function index(): JsonResponse
     {
-        $products = Product::with(['prices'])->get();
+        $products = Product::with(['prices', 'suppliers', 'categories'])->get();
         return response()->json($products, 200);
     }
 
@@ -24,12 +24,22 @@ class ProductController extends Controller
             $product->prices()->create($price);
         }
 
-        return response()->json($product->load(['prices']), 200);
+        $categoryIds = $request->input('categories', []);
+        if (!empty($categoryIds)) {
+            $product->categories()->attach($categoryIds);
+        }
+
+        $supplierIds = $request->input('suppliers', []);
+        if (!empty($supplierIds)) {
+            $product->suppliers()->attach($supplierIds);
+        }
+
+        return response()->json($product->load(['prices', 'suppliers', 'categories']), 200);
     }
 
     public function show(string $id): JsonResponse
     {
-        $product = Product::with(['prices'])->findOrFail($id);
+        $product = Product::with(['prices', 'suppliers', 'categories'])->findOrFail($id);
         return response()->json($product, 200);
     }
 
@@ -43,13 +53,27 @@ class ProductController extends Controller
             $product->prices()->create($price);
         }
 
-        return response()->json($product->load(['prices']), 200);
+        $categoryIds = $request->input('categories', []);
+        if (!empty($categoryIds)) {
+            $product->categories()->sync($categoryIds);
+        }
+
+        $supplierIds = $request->input('suppliers', []);
+        if (!empty($supplierIds)) {
+            $product->suppliers()->sync($supplierIds);
+        }
+
+        return response()->json($product->load(['prices', 'suppliers', 'categories']), 200);
     }
 
     public function destroy(string $id): JsonResponse
     {
         $product = Product::findOrFail($id);
+
         $product->prices()->delete();
+        $product->suppliers()->detach();
+        $product->categories()->detach();
+
         $product->delete();
 
         return response()->json(["message" => "Product With Id: {$id} Has Been Deleted"], 200);
