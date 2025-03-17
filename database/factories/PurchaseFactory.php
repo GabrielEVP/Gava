@@ -14,7 +14,7 @@ class PurchaseFactory extends Factory
     public function definition(): array
     {
         return [
-            'number' => $this->faker->unique()->numerify('INV-#####'),
+            'number' => $this->faker->unique()->numerify('PUR-#####'),
             'date' => $this->faker->date(),
             'status' => $this->faker->randomElement(['pending', 'paid', 'refused']),
             'total_amount' => $this->faker->randomFloat(2, 0, 20),

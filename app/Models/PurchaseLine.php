@@ -19,6 +19,7 @@ class PurchaseLine extends Model
         'tax_rate',
         'total_amount',
         'total_tax_amount',
+        'status',
         'purchase_id',
         'product_id'
     ];
@@ -26,5 +27,10 @@ class PurchaseLine extends Model
     public function purchase(): BelongsTo
     {
         return $this->belongsTo(Purchase::class);
+    }
+
+    public function product(): BelongsTo
+    {
+        return $this->belongsTo(Product::class);
     }
 }

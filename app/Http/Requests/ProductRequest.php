@@ -27,6 +27,8 @@ class ProductRequest extends FormRequest
             'product_prices.*.price' => 'required_with:product_prices|numeric|min:0',
             'products_suppliers' => 'nullable|array',
             'products_suppliers.*.supplier_id' => 'nullable|exists:suppliers,id',
+            'products_categories' => 'nullable|array',
+            'products_categories.*.category_id' => 'nullable|exists:category,id',
         ];
     }
 }

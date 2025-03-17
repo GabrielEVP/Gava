@@ -31,6 +31,7 @@ return new class extends Migration {
             $table->decimal('tax_rate', 10, 2);
             $table->decimal('total_amount', 10, 2)->generatedAs('quantity * unit_price)');
             $table->decimal('total_tax_amount', 10, 2)->generatedAs('quantity * unit_price * (1 + tax_rate / 100)');
+            $table->enum('status', ['pending', 'delivered', 'refused'])->default('pending');
             $table->unsignedBigInteger('purchase_id');
             $table->foreign('purchase_id')->references('id')->on(table: 'purchases')->onDelete('cascade');
             $table->unsignedBigInteger('product_id')->nullable();
@@ -56,15 +57,6 @@ return new class extends Migration {
             $table->enum('status', ['pending', 'paid', 'refused'])->default('pending');
             $table->unsignedBigInteger('purchase_id');
             $table->foreign('purchase_id')->references('id')->on(table: 'purchases')->onDelete('cascade');
-            $table->timestamps();
-        });
-
-        Schema::create('products_purchases', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('product_id');
-            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
-            $table->unsignedBigInteger('purchase_id');
-            $table->foreign('purchase_id')->references('id')->on('purchases')->onDelete('cascade');
             $table->timestamps();
         });
     }

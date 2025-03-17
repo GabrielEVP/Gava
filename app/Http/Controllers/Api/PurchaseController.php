@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PurchaseRequest;
 use App\Models\Purchase;
+use App\Models\Product;
 use Illuminate\Http\JsonResponse;
 
 class PurchaseController extends Controller
@@ -77,20 +78,46 @@ class PurchaseController extends Controller
         return response()->json(["message" => "Purchase With Id: {$id} Has Been Deleted"], 200);
     }
 
-    public function acceptPurchaseAndAttachProducts(string $id): JsonResponse
+    public function paidPurchaseAndDeliveredProducts(string $id): JsonResponse
     {
         $purchase = Purchase::findOrFail($id);
 
-        if ($purchase->status !== 'accepted') {
-            return response()->json(["message" => "Purchase status is not 'accepted'"], 400);
+        if ($purchase->status == 'paid') {
+            return response()->json(["message" => "Purchase status is Paid"], 409);
         }
 
-        $productLines = $purchase->lines;
+        $purchase->update(['status' => 'paid']);
 
-        foreach ($productLines as $line) {
-            $purchase->products()->attach($line->product_id);
+        $lines = $purchase->lines;
+
+        foreach ($lines as $line) {
+            if ($line->status == 'delivered') {
+                continue;
+            }
+
+            $product = null;
+
+            if ($line->product_id) {
+                $product = Product::find($line->product_id);
+            }
+
+            if (!$product) {
+                $product = Product::create([
+                    'name' => $line->description,
+                    'description' => $line->description,
+                    'purchase_price' => $line->unit_price,
+                    'tax_rate' => $line->tax_rate,
+                    'stock_quantity' => $line->quantity,
+                    'user_id' => $purchase->user_id,
+                ]);
+                $line->update(['product_id' => $product->id]);
+            } else {
+                $stock = $product->stock_quantity + $line->quantity;
+                $product->update(['stock_quantity' => $stock]);
+            }
+            $line->update(['status' => 'delivered']);
         }
 
-        return response()->json(["message" => "Products attached to the purchase successfully"], 200);
+        return response()->json(["message" => "Products attached (or created and attached) successfully"], 200);
     }
 }

@@ -26,7 +26,6 @@ class PurchaseRequest extends FormRequest
             'purchase_lines.*.quantity' => 'required_with:purchase_lines|integer|min:1',
             'purchase_lines.*.unit_price' => 'required_with:purchase_lines|numeric|min:0',
             'purchase_lines.*.tax_rate' => 'required_with:purchase_lines|numeric|min:0|max:100',
-            'purchase_lines.*.product_id' => 'nullable|exists:products,id',
             'purchase_payments' => 'array',
             'purchase_payments.*.date' => 'required_with:purchase_payments|date',
             'purchase_payments.*.amount' => 'required_with:purchase_payments|numeric|min:0',

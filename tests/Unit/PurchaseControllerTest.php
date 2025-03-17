@@ -5,7 +5,7 @@ namespace Tests\Feature;
 use App\Models\Supplier;
 use App\Models\TypePayment;
 use App\Models\User;
-use App\Models\purchase;
+use App\Models\Purchase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -121,5 +121,42 @@ class PurchaseControllerTest extends TestCase
         $response = $this->putJson("/api/purchases/{$purchase->id}", $PurchaseData);
         $response->assertStatus(200)->assertJsonFragment(['number' => 'PUR-001']);
         $this->assertDatabaseHas('purchases', ['status' => 'pending']);
+    }
+
+    public function testpaidPurchaseAndDeliveredProducts()
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        $purchase = Purchase::factory()->create([
+            'status' => 'pending',
+            'user_id' => $user->id
+        ]);
+
+        $lines = [
+            [
+                'description' => 'Producto A',
+                'quantity' => 2,
+                'unit_price' => 100.00,
+                'total_amount' => 200.00,
+                'total_tax_amount' => 220.00,
+                'tax_rate' => 10.00,
+                'product_id' => null,
+            ],
+        ];
+
+        foreach ($lines as $line) {
+            $purchase->lines()->create($line);
+        }
+
+        $response = $this->putJson("/api/purchases/paid/{$purchase->id}");
+
+        $response->assertStatus(200)->assertJson(['message' => "Products attached (or created and attached) successfully"]);
+
+        foreach ($purchase->lines as $line) {
+            $this->assertTrue($line->status == 'delivered');
+            $this->assertNotNull($line->product_id);
+            $this->assertDatabaseHas('products', ['id' => $line->product_id]);
+        }
     }
 }

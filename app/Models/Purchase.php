@@ -49,9 +49,4 @@ class Purchase extends Model
     {
         return $this->hasMany(PurchaseDueDate::class);
     }
-
-    public function products(): belongsToMany
-    {
-        return $this->belongsToMany(Product::class, 'products_purchases');
-    }
 }

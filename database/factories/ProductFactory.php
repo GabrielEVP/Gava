@@ -33,9 +33,6 @@ class ProductFactory extends Factory
 
             $suppliers = \App\Models\Supplier::factory()->count(2)->create();
             $product->suppliers()->attach($suppliers->pluck('id'));
-
-            $purchases = \App\Models\Purchase::factory()->count(2)->create();
-            $product->purchases()->attach($purchases->pluck('id'));
         });
     }
 }

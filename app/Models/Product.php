@@ -36,6 +36,11 @@ class Product extends Model
         return $this->hasMany(ProductPrice::class);
     }
 
+    public function purchaseLines(): HasMany
+    {
+        return $this->hasMany(PurchaseLine::class);
+    }
+
     public function categories(): belongsToMany
     {
         return $this->belongsToMany(Category::class, 'products_categories');
@@ -44,10 +49,5 @@ class Product extends Model
     public function suppliers(): belongsToMany
     {
         return $this->belongsToMany(Supplier::class, 'products_suppliers');
-    }
-
-    public function purchases(): belongsToMany
-    {
-        return $this->belongsToMany(Purchase::class, 'products_purchases');
     }
 }

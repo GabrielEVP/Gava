@@ -36,4 +36,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/clients/search/{query}', [ClientController::class, 'search']);
     Route::get('/suppliers/search/{query}', [SupplierController::class, 'search']);
+
+    Route::put('/purchases/paid/{id}', [PurchaseController::class, 'paidPurchaseAndDeliveredProducts']);
+
 });

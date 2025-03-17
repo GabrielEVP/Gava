@@ -20,6 +20,7 @@ class PurchaseLineFactory extends Factory
             'tax_rate' => $this->faker->randomFloat(2, 0, 25),
             'total_amount' => $this->faker->randomFloat(2, 10, 10000),
             'total_tax_amount' => $this->faker->randomFloat(2, 10, 10000),
+            'status' => $this->faker->randomElement(['pending', 'delivered', 'refused']),
             'purchase_id' => Purchase::factory(),
             'product_id' => Product::factory(),
         ];
