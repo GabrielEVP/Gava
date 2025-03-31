@@ -19,6 +19,7 @@ class ClientAddress extends Model
         'postal_code',
         'country',
         'is_billing',
+        'client_id',
     ];
 
     public function client(): BelongsTo

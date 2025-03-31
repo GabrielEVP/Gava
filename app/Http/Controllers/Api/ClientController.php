@@ -6,12 +6,28 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ClientRequest;
 use App\Models\Client;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class ClientController extends Controller
 {
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        $clients = Client::all();
+        $sortBy = $request->query('sortBy', 'legal_name');
+        $order = $request->query('order', 'asc');
+
+        $validColumns = ['id', 'registration_number', 'legal_name', 'type', 'country', 'tax_rate'];
+        if (!in_array($sortBy, $validColumns)) {
+            return response()->json(['error' => 'Invalid sortBy column'], 400);
+        }
+
+        if (!in_array(strtolower($order), ['asc', 'desc'])) {
+            return response()->json(['error' => 'Invalid order value'], 400);
+        }
+
+        $clients = Client::with(['addresses', 'phones', 'emails', 'bankAccounts'])
+            ->orderBy($sortBy, $order)
+            ->get();
+
         return response()->json($clients, 200);
     }
 
@@ -44,7 +60,7 @@ class ClientController extends Controller
 
     public function show(string $id): JsonResponse
     {
-        $client = Client::with(['phones', 'emails', 'bankAccounts'])->findOrFail($id);
+        $client = Client::with(['addresses', 'phones', 'emails', 'bankAccounts'])->findOrFail($id);
         return response()->json($client, 200);
     }
 
@@ -91,7 +107,7 @@ class ClientController extends Controller
 
     public function search(string $query): JsonResponse
     {
-        $clients = Client::with(['phones', 'emails', 'bankAccounts'])
+        $clients = Client::with(['addresses', 'phones', 'emails', 'bankAccounts'])
             ->where('legal_name', 'LIKE', "%{$query}%")
             ->get();
 
