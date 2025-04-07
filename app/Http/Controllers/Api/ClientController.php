@@ -12,24 +12,46 @@ class ClientController extends Controller
 {
     public function index(Request $request): JsonResponse
     {
-        $sortBy = $request->query('sortBy', 'legal_name');
-        $order = $request->query('order', 'asc');
+        $search = $request->query('search', '');
+        $sort = $request->query('sort')['column'] ?? 'legal_name';
+        $order = strtolower($request->query('sort')['order'] ?? 'asc');
 
         $validColumns = ['id', 'registration_number', 'legal_name', 'type', 'country', 'tax_rate'];
-        if (!in_array($sortBy, $validColumns)) {
+
+        if (!in_array($sort, $validColumns)) {
             return response()->json(['error' => 'Invalid sortBy column'], 400);
         }
 
-        if (!in_array(strtolower($order), ['asc', 'desc'])) {
+        if (!in_array($order, ['asc', 'desc'])) {
             return response()->json(['error' => 'Invalid order value'], 400);
         }
 
-        $clients = Client::with(['addresses', 'phones', 'emails', 'bankAccounts'])
-            ->orderBy($sortBy, $order)
-            ->get();
+        // Construcción de la consulta
+        $query = Client::with(['addresses', 'phones', 'emails', 'bankAccounts']);
+
+        // Filtro de búsqueda
+        if (!empty($search)) {
+            $query->where('legal_name', 'LIKE', "%{$search}%");
+        }
+
+        // Aplicar filtros dinámicos desde select[...]
+        if ($request->has('select')) {
+            foreach ($request->query('select') as $filter) {
+                if (!empty($filter['option']) && !empty($filter['value']) && in_array($filter['option'], $validColumns)) {
+                    $query->where($filter['option'], $filter['value']);
+                }
+            }
+        }
+
+        // Aplicar ordenamiento correctamente
+        $query->orderBy($sort, $order);
+
+        // Obtener los resultados paginados
+        $clients = $query->get();
 
         return response()->json($clients, 200);
     }
+
 
     public function store(ClientRequest $request)
     {

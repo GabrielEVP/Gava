@@ -14,6 +14,7 @@ return new class extends Migration {
             $table->enum(column: 'status', allowed: ['pending', 'paid', 'refused'])->default('pending');
             $table->decimal('total_amount', 10, 2);
             $table->decimal('total_tax_amount', 10, 2);
+            $table->text('notes')->nullable();
             $table->timestamps();
             $table->softDeletes();
             $table->unsignedBigInteger('client_id');
@@ -32,8 +33,7 @@ return new class extends Migration {
             $table->decimal('total_tax_amount', 10, 2)->generatedAs('quantity * unit_price * (1 + tax_rate / 100)');
             $table->unsignedBigInteger('invoice_id');
             $table->foreign('invoice_id')->references('id')->on('invoices')->onDelete('cascade');
-            $table->unsignedBigInteger('product_id')->nullable();
-            $table->foreign('product_id')->references('id')->on('products')->onDelete('set null');
+            $table->foreignId('product_id')->nullable()->constrained('products')->nullOnDelete();
             $table->timestamps();
         });
 
