@@ -26,10 +26,8 @@ class ClientController extends Controller
             return response()->json(['error' => 'Invalid order value'], 400);
         }
 
-        // Construcción de la consulta
         $query = Client::with(['addresses', 'phones', 'emails', 'bankAccounts']);
 
-        // Filtro de búsqueda
         if (!empty($search)) {
             $query->where('legal_name', 'LIKE', "%{$search}%");
         }
@@ -43,10 +41,7 @@ class ClientController extends Controller
             }
         }
 
-        // Aplicar ordenamiento correctamente
         $query->orderBy($sort, $order);
-
-        // Obtener los resultados paginados
         $clients = $query->get();
 
         return response()->json($clients, 200);

@@ -6,12 +6,57 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\InvoiceRequest;
 use App\Models\Invoice;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class InvoiceController extends Controller
 {
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        $invoices = Invoice::with(['lines', 'payments', 'dueDates'])->get();
+        $search = $request->query('search', '');
+        $sort = $request->query('sort')['column'] ?? 'date';
+        $order = strtolower($request->query('sort')['order'] ?? 'asc');
+
+        $validColumns = ['id', 'number', 'status', 'date', 'total_amount', 'client_id'];
+
+        if (!in_array($sort, $validColumns)) {
+            return response()->json(['error' => 'Invalid sort column'], 400);
+        }
+
+        if (!in_array($order, ['asc', 'desc'])) {
+            return response()->json(['error' => 'Invalid sort order'], 400);
+        }
+
+        $query = Invoice::with(['lines', 'payments', 'dueDates']);
+
+        if (!empty($search)) {
+            $query->where(function ($q) use ($search) {
+                $q->where('number', 'LIKE', "%{$search}%")
+                    ->orWhere('notes', 'LIKE', "%{$search}%");
+            });
+        }
+
+        if ($request->has('select')) {
+            foreach ($request->query('select') as $filter) {
+                if (
+                    !empty($filter['option']) &&
+                    !empty($filter['value']) &&
+                    in_array($filter['option'], $validColumns)
+                ) {
+                    $query->where($filter['option'], $filter['value']);
+                }
+            }
+        }
+
+        if ($request->has('dateRange')) {
+            $dateRange = $request->query('dateRange');
+            if (!empty($dateRange['start']) && !empty($dateRange['end'])) {
+                $query->whereBetween('date', [$dateRange['start'], $dateRange['end']]);
+            }
+        }
+
+        $query->orderBy($sort, $order);
+        $invoices = $query->get();
+
         return response()->json($invoices, 200);
     }
 
