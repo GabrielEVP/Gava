@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\PurchaseController;
 use App\Http\Controllers\Api\SupplierController;
 use App\Http\Controllers\Api\TypePaymentController;
 use App\Http\Controllers\Api\TypePriceController;
+use App\Http\Controllers\Api\ProfileImageController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -22,10 +23,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::middleware('auth:sanctum')->group(function () {
+    Route::get('private/profile_images/{filename}', [ProfileImageController::class, 'show']);
     Route::post('changePassword', [AuthController::class, 'changePassword']);
     Route::post('logout', [AuthController::class, 'logout']);
 
-    Route::put('/user/update', [AuthController::class, 'update']); // <--- Added this route
+    Route::put('/user/update', [AuthController::class, 'update']);
 
     Route::resource('/categories', CategoryController::class);
     Route::resource('/clients', ClientController::class);

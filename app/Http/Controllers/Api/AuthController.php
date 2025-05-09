@@ -4,13 +4,12 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AuthRequest;
-use App\Http\Requests\UpdateUserRequest; // Make sure this Request class exists and has validation rules
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
@@ -67,26 +66,28 @@ class AuthController extends Controller
     }
 
 
-    public function update(AuthRequest $request): JsonResponse
+    public function update(Request $request)
     {
         $user = auth()->user();
-        $data = $request->validated();
+
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'max:255', 'unique:users,email,' . $user->id],
+            'profile_image' => ['nullable', 'image', 'max:2048'],
+        ]);
 
         if ($request->hasFile('profile_image')) {
-            if ($user->profile_image && Storage::disk('public')->exists($user->profile_image)) {
-                Storage::disk('public')->delete($user->profile_image);
-            }
-            $imagePath = $request->file('profile_image')->store('profile_images', 'public');
-            $data['profile_image'] = $imagePath;
+            $validated['profile_image'] = $this->handleProfileImageUpload($request, $user);
         }
 
-        $user->update($data);
+        $user->update($validated);
 
         return response()->json([
-            'message' => 'Usuario actualizado exitosamente.',
-            'user' => $user,
+            'message' => 'Usuario actualizado correctamente.',
+            'user' => $user->fresh(),
         ], 200);
     }
+
 
     public function logout(): JsonResponse
     {
@@ -96,4 +97,16 @@ class AuthController extends Controller
             'message' => 'Successfully logged out',
         ], 200);
     }
+
+    private function handleProfileImageUpload(Request $request, $user): string
+    {
+        // Elimina imagen anterior si existe
+        if ($user->profile_image && Storage::exists($user->profile_image)) {
+            Storage::delete($user->profile_image);
+        }
+
+        // Guarda nueva imagen en storage/app/private/profile_images
+        return $request->file('profile_image')->store('private/profile_images');
+    }
+
 }
