@@ -10,12 +10,9 @@ use App\Http\Controllers\Api\PurchaseController;
 use App\Http\Controllers\Api\SupplierController;
 use App\Http\Controllers\Api\TypePaymentController;
 use App\Http\Controllers\Api\TypePriceController;
-use Laravel\Sanctum\Http\Controllers\CsrfCookieController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-// Ruta para obtener el CSRF token
-Route::get('sanctum/csrf-cookie', [CsrfCookieController::class, 'show']);
 
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
@@ -27,6 +24,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('changePassword', [AuthController::class, 'changePassword']);
     Route::post('logout', [AuthController::class, 'logout']);
+
+    Route::put('/user/update', [AuthController::class, 'update']); // <--- Added this route
 
     Route::resource('/categories', CategoryController::class);
     Route::resource('/clients', ClientController::class);
@@ -43,4 +42,3 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::put('/purchases/paid/{id}', [PurchaseController::class, 'paidPurchaseAndDeliveredProducts']);
 });
-
