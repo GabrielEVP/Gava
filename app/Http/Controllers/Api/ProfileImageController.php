@@ -12,8 +12,13 @@ class ProfileImageController extends Controller
             abort(403, 'No autorizado');
         }
 
-        return response()->file(
-            base_path("storage/app/private/profile_images/{$filename}")
-        );
+        $filePath = storage_path("app/private/profile_images/{$filename}");
+
+        if (!file_exists($filePath)) {
+            abort(404, 'Imagen no encontrada');
+        }
+
+        return response()->file($filePath);
     }
+
 }

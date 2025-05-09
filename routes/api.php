@@ -23,7 +23,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('private/profile_images/{filename}', [ProfileImageController::class, 'show']);
+    Route::get('/profile_images/{filename}', [ProfileImageController::class, 'show']);
     Route::post('changePassword', [AuthController::class, 'changePassword']);
     Route::post('logout', [AuthController::class, 'logout']);
 
