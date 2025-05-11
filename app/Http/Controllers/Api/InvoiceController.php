@@ -7,6 +7,7 @@ use App\Http\Requests\InvoiceRequest;
 use App\Models\Invoice;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use App\Interfaces\PDFGeneratorInterface;
 
 class InvoiceController extends Controller
 {
@@ -121,4 +122,19 @@ class InvoiceController extends Controller
 
         return response()->json(["message" => "Invoice With Id: {$id} Has Been Deleted"], 200);
     }
+    public function download(PDFGeneratorInterface $pdf, $invoiceId)
+    {
+        $invoice = Invoice::findOrFail($invoiceId);
+        $client = $invoice->client;
+
+        $content = $pdf->fromView('invoices.pdf', [
+            'invoice' => $invoice,
+            'client' => $client,
+        ]);
+
+        return response($content)
+            ->header('Content-Type', 'application/pdf')
+            ->header('Content-Disposition', 'inline; filename="Factura_' . $invoiceId . '.pdf"');
+    }
+
 }

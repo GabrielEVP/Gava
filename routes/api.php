@@ -43,4 +43,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/suppliers/search/{query}', [SupplierController::class, 'search']);
 
     Route::put('/purchases/paid/{id}', [PurchaseController::class, 'paidPurchaseAndDeliveredProducts']);
+
+    Route::get('/invoices/{invoice}/download', [InvoiceController::class, 'download']);
 });
