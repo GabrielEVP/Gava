@@ -1,21 +1,15 @@
 <div class="invoice-container">
-    <!-- Header -->
     <div class="invoice-header">
         <h1>Invoice #{{ $invoice->id }}</h1>
         <p>Date: {{ $invoice->date }}</p>
     </div>
-
-    <!-- Invoice Details -->
     <div class="invoice-details">
-        <!-- Bill To -->
         <div class="invoice-to">
             <h3>Bill To:</h3>
             <p><strong>Name:</strong> {{ $invoice->customer_name }}</p>
             <p><strong>Address:</strong> {{ $invoice->customer_address }}</p>
             <p><strong>Email:</strong> {{ $invoice->customer_email }}</p>
         </div>
-
-        <!-- From -->
         <div class="invoice-from">
             <h3>From:</h3>
             <p><strong>Client:</strong> {{ $client->legal_name }}</p>
@@ -23,8 +17,6 @@
             <p><strong>Phone:</strong> {{ $client->phones->first()->phone ?? 'No phone available' }}</p>
         </div>
     </div>
-
-    <!-- Invoice Lines -->
     <div class="invoice-lines">
         <h3>Invoice Lines:</h3>
         <table>
@@ -48,8 +40,6 @@
             </tbody>
         </table>
     </div>
-
-    <!-- Invoice Summary -->
     <div class="invoice-summary">
         <div class="summary-line">
             <span>Subtotal:</span>
@@ -65,8 +55,6 @@
         </div>
     </div>
 </div>
-
-<!-- Styles -->
 <style>
     .invoice-container {
         font-family: Arial, sans-serif;
