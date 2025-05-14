@@ -30,6 +30,12 @@ class Client extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function events(): HasMany
+    {
+        return $this->hasMany(ClientEvent::class);
+    }
+
     public function addresses(): HasMany
     {
         return $this->hasMany(ClientAddress::class);

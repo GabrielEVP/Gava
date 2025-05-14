@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ClientRequest;
 use App\Models\Client;
+use App\Models\ClientEvent;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -32,7 +33,6 @@ class ClientController extends Controller
             $query->where('legal_name', 'LIKE', "%{$search}%");
         }
 
-        // Aplicar filtros dinámicos desde select[...]
         if ($request->has('select')) {
             foreach ($request->query('select') as $filter) {
                 if (!empty($filter['option']) && !empty($filter['value']) && in_array($filter['option'], $validColumns)) {
@@ -77,7 +77,16 @@ class ClientController extends Controller
 
     public function show(string $id): JsonResponse
     {
-        $client = Client::with(['addresses', 'phones', 'emails', 'bankAccounts'])->findOrFail($id);
+        $client = Client::with([
+            'events' => function ($query) {
+                $query->latest()->limit(5);
+            },
+            'addresses',
+            'phones',
+            'emails',
+            'bankAccounts',
+        ])->findOrFail($id);
+
         return response()->json($client, 200);
     }
 
@@ -107,6 +116,15 @@ class ClientController extends Controller
             $client->bankAccounts()->create($bankAccount);
         }
 
+        $client_event = new ClientEvent([
+            'event' => 'update',
+            'reference_table' => null,
+            'reference_id' => null,
+            'client_id' => $client->id,
+        ]);
+
+        $this->logClientEvent($client_event, $client);
+
         return response()->json($client->load(['addresses', 'phones', 'emails', 'bankAccounts']), 200);
     }
 
@@ -129,5 +147,16 @@ class ClientController extends Controller
             ->get();
 
         return response()->json($clients, 200);
+    }
+
+    private function logClientEvent(ClientEvent $client_event, Client $client): void
+    {
+        ClientEvent::create([
+            'event' => $client_event->event,
+            'reference_table' => $client_event->reference_table,
+            'reference_id' => $client_event->reference_id,
+            'description' => $client_event->description,
+            'client_id' => $client->id,
+        ]);
     }
 }
