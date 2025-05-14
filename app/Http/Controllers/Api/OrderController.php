@@ -54,4 +54,15 @@ class OrderController extends Controller
 
         return response()->json(["message" => "Order With Id: {$id} Has Been Deleted"], 200);
     }
+
+    public function latestByClient(string $clientId): JsonResponse
+    {
+        $orders = Order::with(['lines'])
+            ->where('client_id', $clientId)
+            ->orderBy('date', 'desc')
+            ->take(5)
+            ->get();
+
+        return response()->json($orders, 200);
+    }
 }

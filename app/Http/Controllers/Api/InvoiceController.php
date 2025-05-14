@@ -137,4 +137,15 @@ class InvoiceController extends Controller
             ->header('Content-Disposition', 'inline; filename="Factura_' . $invoiceId . '.pdf"');
     }
 
+    public function latestByClient(string $clientId): JsonResponse
+    {
+        $invoices = Invoice::with(['lines', 'payments', 'dueDates'])
+            ->where('client_id', $clientId)
+            ->orderBy('date', 'desc')
+            ->take(5)
+            ->get();
+
+        return response()->json($invoices, 200);
+    }
+
 }

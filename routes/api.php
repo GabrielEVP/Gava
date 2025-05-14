@@ -45,4 +45,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/purchases/paid/{id}', [PurchaseController::class, 'paidPurchaseAndDeliveredProducts']);
 
     Route::get('/invoices/{invoice}/download', [InvoiceController::class, 'download']);
+    Route::get('/invoices/clients/{clientId}', [InvoiceController::class, 'latestByClient']);
+
+    Route::get('/orders/clients/{clientId}', [OrderController::class, 'latestByClient']);
+
+
+
 });
